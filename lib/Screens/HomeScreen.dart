@@ -1,5 +1,4 @@
-
-import 'package:arjunagym/Screens/Allmembers.dart';
+import 'package:arjunagym/Screens/Displayall.dart';
 import 'package:arjunagym/Screens/MemberListPage.dart';
 import 'package:arjunagym/Screens/RecyleScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Text('Add New Member'),
             ),
+            SizedBox(height: 100,),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -51,29 +51,20 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AllMembersPage()),
-                );
-              },
-              child: Text('View All Members'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
                   MaterialPageRoute(builder: (context) => RecycleBinPage()),
                 );
               },
               child: Text('Recycle Members'),
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(builder: (context) => MemberListPage()),
-            //     );
-            //   },
-            //   child: Text("Active Members"),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DisplayallMembers()),
+                );
+              },
+              child: Text("Display all Members"),
+            ),
             // ElevatedButton(
             //   onPressed: () {
             //     Navigator.push(

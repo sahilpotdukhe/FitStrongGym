@@ -7,6 +7,7 @@ class GymPlanProvider with ChangeNotifier {
 
   List<GymPlan> get plans => _plans;
 
+
   Future<void> fetchPlans() async {
     final querySnapshot = await FirebaseFirestore.instance.collection('gymPlans').get();
     _plans = querySnapshot.docs.map((doc) => GymPlan(

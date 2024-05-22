@@ -7,32 +7,49 @@ import 'package:image_picker/image_picker.dart';
 
 class MemberProvider with ChangeNotifier {
   List<Member> _members = [];
+  List<Member> _recycleBinMembers = [];
 
   List<Member> get members => _members;
+  List<Member> get recycleBinMembers => _recycleBinMembers;
 
   MemberProvider() {
     // Fetch members when the provider is initialized
-    fetchAllMembers();
+    getAllMembers();
   }
 
-  // Future<void> fetchMembers() async {
-  //   if (_members.isNotEmpty) {
-  //     // If members are already fetched, return without fetching again
-  //     return;
-  //   }
-  //
-  //   try {
-  //     final QuerySnapshot querySnapshot =
-  //     await FirebaseFirestore.instance.collection('members').get();
-  //     _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-  //     notifyListeners();
-  //     print('Fetched members: $_members'); // Debug statement
-  //   } catch (error) {
-  //     print('Error fetching members: $error');
-  //   }
-  // }
+  Future<List<Member>> getAllMembers() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance.collection('members').get();
+      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+      notifyListeners();
+      return _members;
+    } catch (error) {
+      print('Error fetching members: $error');
+      return [];
+    }
+  }
 
+  Future<void> fetchRecycleBinMembers() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance.collection('recyclebin').get();
+      _recycleBinMembers = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+      notifyListeners();
+    } catch (error) {
+      print('Error fetching recycle bin members: $error');
+    }
+  }
 
+  Future<void> restoreMember(Member member) async {
+    try {
+      await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).delete();
+      await FirebaseFirestore.instance.collection('members').doc(member.id).set(member.toMap());
+      await fetchRecycleBinMembers();
+      await getAllMembers();
+      notifyListeners();
+    } catch (error) {
+      print('Error restoring member: $error');
+    }
+  }
   Member _memberFromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Member(
@@ -76,31 +93,56 @@ class MemberProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Member>> fetchExpiredMembers() async {
+  Future<void> fetchActiveMembers() async {
     try {
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('members')
-          .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
-          .get();
-      return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-    } catch (error) {
-      print('Error fetching expired members: $error');
-      return [];
-    }
-  }
-
-  Future<List<Member>> fetchActiveMembers() async {
-    try {
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      final querySnapshot = await FirebaseFirestore.instance
           .collection('members')
           .where('expiryDate', isGreaterThan: Timestamp.now())
           .get();
-      return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+      notifyListeners();
     } catch (error) {
       print('Error fetching active members: $error');
-      return [];
     }
   }
+
+  Future<void> fetchExpiredMembers() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('members')
+          .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
+          .get();
+      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+      notifyListeners();
+    } catch (error) {
+      print('Error fetching expired members: $error');
+    }
+  }
+  // Future<List<Member>> fetchExpiredMembers() async {
+  //   try {
+  //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //         .collection('members')
+  //         .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
+  //         .get();
+  //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  //   } catch (error) {
+  //     print('Error fetching expired members: $error');
+  //     return [];
+  //   }
+  // }
+  //
+  // Future<List<Member>> fetchActiveMembers() async {
+  //   try {
+  //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //         .collection('members')
+  //         .where('expiryDate', isGreaterThan: Timestamp.now())
+  //         .get();
+  //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  //   } catch (error) {
+  //     print('Error fetching active members: $error');
+  //     return [];
+  //   }
+  // }
   Future<void> updateMember(Member member) async {
     try {
       await FirebaseFirestore.instance.collection('members').doc(member.id).update({
@@ -127,21 +169,6 @@ class MemberProvider with ChangeNotifier {
     }
   }
 
-  // Future<void> deleteMember(Member member) async {
-  //   try {
-  //     // Add the member to the recycle bin collection
-  //     await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
-  //
-  //     // Remove the member from the members collection
-  //     await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
-  //
-  //     _members.removeWhere((m) => m.id == member.id);
-  //     notifyListeners();
-  //   } catch (error) {
-  //     print('Error deleting member: $error');
-  //   }
-  // }
-
   Future<void> deleteMember(Member member) async {
     try {
       await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
@@ -149,59 +176,58 @@ class MemberProvider with ChangeNotifier {
 
       _members.removeWhere((m) => m.id == member.id);
       notifyListeners();
-      await fetchAllMembers();
     } catch (error) {
       print('Error deleting member: $error');
     }
   }
 
-  Future<void> restoreMember(Member member) async {
-    try {
-      // Delete the member from the recycle bin collection
-      await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).delete();
-
-      // Add the member back to the members collection
-      await FirebaseFirestore.instance.collection('members').doc(member.id).set(member.toMap());
-
-      _members.add(member); // Add the member back to the local list
-      notifyListeners();
-    } catch (error) {
-      print('Error restoring member: $error');
-    }
-  }
-  Future<List<Member>> fetchAllMembers() async {
-    try {
-      // Fetch active members
-      final Future<List<Member>> activeMembersFuture = fetchActiveMembers();
-
-      // Fetch expired members
-      final Future<List<Member>> expiredMembersFuture = fetchExpiredMembers();
-
-      // Wait for both futures to complete
-      final List<List<Member>> results = await Future.wait([activeMembersFuture, expiredMembersFuture]);
-
-      // Combine active and expired members into a single list
-      final List<Member> allMembers = [];
-      for (final membersList in results) {
-        allMembers.addAll(membersList);
-      }
-
-      print('Fetched all members: $allMembers');
-      return allMembers;
-    } catch (error) {
-      print('Error fetching all members: $error');
-      return [];
-    }
-  }
+  // Future<void> restoreMember(Member member) async {
+  //   try {
+  //     // Delete the member from the recycle bin collection
+  //     await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).delete();
+  //
+  //     // Add the member back to the members collection
+  //     await FirebaseFirestore.instance.collection('members').doc(member.id).set(member.toMap());
+  //
+  //     _members.add(member); // Add the member back to the local list
+  //     notifyListeners();
+  //   } catch (error) {
+  //     print('Error restoring member: $error');
+  //   }
+  // }
+  // Future<List<Member>> fetchAllMembers() async {
+  //   try {
+  //     // Fetch active members
+  //     final Future<List<Member>> activeMembersFuture = fetchActiveMembers();
+  //
+  //     // Fetch expired members
+  //     final Future<List<Member>> expiredMembersFuture = fetchExpiredMembers();
+  //
+  //     // Wait for both futures to complete
+  //     final List<List<Member>> results = await Future.wait([activeMembersFuture, expiredMembersFuture]);
+  //
+  //     // Combine active and expired members into a single list
+  //     final List<Member> allMembers = [];
+  //     for (final membersList in results) {
+  //       allMembers.addAll(membersList);
+  //     }
+  //
+  //     print('Fetched all members: $allMembers');
+  //     return allMembers;
+  //   } catch (error) {
+  //     print('Error fetching all members: $error');
+  //     return [];
+  //   }
+  // }
   // Fetch recycle bin members
-  Future<List<Member>> fetchRecycleBinMembers() async {
-    try {
-      final QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('recyclebin').get();
-      return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-    } catch (error) {
-      print('Error fetching recycle bin members: $error');
-      return [];
-    }
-  }
+  // Future<List<Member>> fetchRecycleBinMembers() async {
+  //   try {
+  //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('recyclebin').get();
+  //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  //   } catch (error) {
+  //     print('Error fetching recycle bin members: $error');
+  //     return [];
+  //   }
+  // }
 
 }

@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        debugShowCheckedModeBanner: false,
         home: HomeScreen(),
         routes: {
           '/add-plan': (context) => AddGymPlanPage(),

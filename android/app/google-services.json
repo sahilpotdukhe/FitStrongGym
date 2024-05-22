@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "404781552195",
+    "project_id": "arjuna-gym",
+    "storage_bucket": "arjuna-gym.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404781552195:android:0ac7910169a3bd881dbaf6",
+        "android_client_info": {
+          "package_name": "com.example.arjuna_fitness_gym"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBNhYNW9_1KoXPRiOtSXDwC221utvGcWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404781552195:android:32ddef34cfcfe6fd1dbaf6",
+        "android_client_info": {
+          "package_name": "com.example.arjunagym"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBNhYNW9_1KoXPRiOtSXDwC221utvGcWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

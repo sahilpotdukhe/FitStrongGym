@@ -3,6 +3,7 @@ import 'package:arjunagym/Provider/PlanProvider.dart';
 import 'package:arjunagym/Screens/MemberDetails.dart';
 import 'package:arjunagym/Screens/SearchScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -97,18 +98,31 @@ class _DisplayallMembersState extends State<DisplayallMembers> {
                         // If user confirms deletion, proceed to delete the member
                         if (confirmDelete == true) {
                           try {
-                            // Delete the member from the members collection
-                            await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
+                            User? currentUser = FirebaseAuth.instance.currentUser;
+                            if (currentUser != null) {
+                              // Delete the member from the user's members subcollection
+                              await FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(currentUser.uid)
+                                  .collection('members')
+                                  .doc(member.id)
+                                  .delete();
 
-                            // Move the member to the recyclebin collection
-                            await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
+                              // Move the member to the user's recyclebin subcollection
+                              await FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(currentUser.uid)
+                                  .collection('recyclebin')
+                                  .doc(member.id)
+                                  .set(member.toMap());
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Member deleted successfully')),
-                            );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Member deleted successfully')),
+                              );
 
-                            // Refresh the member list
-                            Provider.of<MemberProvider>(context, listen: false).getAllMembers();
+                              // Refresh the member list
+                              Provider.of<MemberProvider>(context, listen: false).getAllMembers();
+                            }
                           } catch (error) {
                             print('Error deleting member: $error');
                             ScaffoldMessenger.of(context).showSnackBar(

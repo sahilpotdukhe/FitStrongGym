@@ -1,4 +1,5 @@
 import 'package:arjunagym/Models/MemberModel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -107,21 +108,26 @@ class _EditMemberDetailsPageState extends State<EditMemberDetailsPage> {
     });
 
     try {
-      await FirebaseFirestore.instance
-          .collection('members')
-          .doc(widget.member.id)
-          .update({
-        'name': _nameController.text,
-        'mobileNumber': _mobileNumberController.text,
-        'height': double.parse(_heightController.text),
-        'weight': double.parse(_weightController.text),
-        'address': _addressController.text,
-        'gender': _gender,
-      });
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .doc(widget.member.id)
+            .update({
+          'name': _nameController.text,
+          'mobileNumber': _mobileNumberController.text,
+          'height': double.parse(_heightController.text),
+          'weight': double.parse(_weightController.text),
+          'address': _addressController.text,
+          'gender': _gender,
+        });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Member details updated successfully')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Member details updated successfully')),
+        );
+      }
     } catch (error) {
       print('Error updating member details: $error');
       ScaffoldMessenger.of(context).showSnackBar(

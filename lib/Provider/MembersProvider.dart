@@ -1,4 +1,5 @@
 import 'package:arjunagym/Models/MemberModel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -19,10 +20,19 @@ class MemberProvider with ChangeNotifier {
 
   Future<List<Member>> getAllMembers() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance.collection('members').get();
-      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-      notifyListeners();
-      return _members;
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .get();
+        _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        notifyListeners();
+        return _members;
+      } else {
+        return [];
+      }
     } catch (error) {
       print('Error fetching members: $error');
       return [];
@@ -31,9 +41,16 @@ class MemberProvider with ChangeNotifier {
 
   Future<void> fetchRecycleBinMembers() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance.collection('recyclebin').get();
-      _recycleBinMembers = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-      notifyListeners();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('recyclebin')
+            .get();
+        _recycleBinMembers = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        notifyListeners();
+      }
     } catch (error) {
       print('Error fetching recycle bin members: $error');
     }
@@ -41,15 +58,29 @@ class MemberProvider with ChangeNotifier {
 
   Future<void> restoreMember(Member member) async {
     try {
-      await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).delete();
-      await FirebaseFirestore.instance.collection('members').doc(member.id).set(member.toMap());
-      await fetchRecycleBinMembers();
-      await getAllMembers();
-      notifyListeners();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('recyclebin')
+            .doc(member.id)
+            .delete();
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .doc(member.id)
+            .set(member.toMap());
+        await fetchRecycleBinMembers();
+        await getAllMembers();
+        notifyListeners();
+      }
     } catch (error) {
       print('Error restoring member: $error');
     }
   }
+
   Member _memberFromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return Member(
@@ -70,39 +101,51 @@ class MemberProvider with ChangeNotifier {
   }
 
   Future<void> addMember(Member member, XFile photo) async {
-    final storageRef = FirebaseStorage.instance.ref().child('member_photos/${member.name}.jpg');
-    final uploadTask = storageRef.putFile(File(photo.path));
-    final downloadUrl = await (await uploadTask).ref.getDownloadURL();
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final storageRef = FirebaseStorage.instance.ref().child('member_photos/${member.name}.jpg');
+      final uploadTask = storageRef.putFile(File(photo.path));
+      final downloadUrl = await (await uploadTask).ref.getDownloadURL();
 
-    final memberData = {
-      'name': member.name,
-      'mobileNumber': member.mobileNumber,
-      'dateOfBirth': member.dateOfBirth,
-      'height': member.height,
-      'weight': member.weight,
-      'photoUrl': downloadUrl,
-      'planId': member.planId,
-      'dateOfAdmission': member.dateOfAdmission,
-      'renewalDate' : member.renewalDate,
-      'expiryDate': member.expiryDate,
-      'address': member.address,
-      'gender': member.gender,
-    };
+      final memberData = {
+        'name': member.name,
+        'mobileNumber': member.mobileNumber,
+        'dateOfBirth': member.dateOfBirth,
+        'height': member.height,
+        'weight': member.weight,
+        'photoUrl': downloadUrl,
+        'planId': member.planId,
+        'dateOfAdmission': member.dateOfAdmission,
+        'renewalDate': member.renewalDate,
+        'expiryDate': member.expiryDate,
+        'address': member.address,
+        'gender': member.gender,
+      };
 
-    final docRef = await FirebaseFirestore.instance.collection('members').add(memberData);
-    final newMember = member.copyWith(id: docRef.id);
-    _members.add(newMember);
-    notifyListeners();
+      final docRef = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.uid)
+          .collection('members')
+          .add(memberData);
+      final newMember = member.copyWith(id: docRef.id);
+      _members.add(newMember);
+      notifyListeners();
+    }
   }
 
   Future<void> fetchActiveMembers() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('members')
-          .where('expiryDate', isGreaterThan: Timestamp.now())
-          .get();
-      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-      notifyListeners();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .where('expiryDate', isGreaterThan: Timestamp.now())
+            .get();
+        _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        notifyListeners();
+      }
     } catch (error) {
       print('Error fetching active members: $error');
     }
@@ -110,61 +153,50 @@ class MemberProvider with ChangeNotifier {
 
   Future<void> fetchExpiredMembers() async {
     try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('members')
-          .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
-          .get();
-      _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-      notifyListeners();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
+            .get();
+        _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        notifyListeners();
+      }
     } catch (error) {
       print('Error fetching expired members: $error');
     }
   }
-  // Future<List<Member>> fetchExpiredMembers() async {
-  //   try {
-  //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //         .collection('members')
-  //         .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
-  //         .get();
-  //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-  //   } catch (error) {
-  //     print('Error fetching expired members: $error');
-  //     return [];
-  //   }
-  // }
-  //
-  // Future<List<Member>> fetchActiveMembers() async {
-  //   try {
-  //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //         .collection('members')
-  //         .where('expiryDate', isGreaterThan: Timestamp.now())
-  //         .get();
-  //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
-  //   } catch (error) {
-  //     print('Error fetching active members: $error');
-  //     return [];
-  //   }
-  // }
+
   Future<void> updateMember(Member member) async {
     try {
-      await FirebaseFirestore.instance.collection('members').doc(member.id).update({
-        'name': member.name,
-        'mobileNumber': member.mobileNumber,
-        'dateOfBirth': member.dateOfBirth,
-        'height': member.height,
-        'weight': member.weight,
-        'photoUrl': member.photoUrl,
-        'planId': member.planId,
-        'dateOfAdmission': member.dateOfAdmission,
-        'renewalDate' : member.renewalDate,
-        'expiryDate': member.expiryDate,
-        'address': member.address,
-        'gender': member.gender,
-      });
-      int index = _members.indexWhere((m) => m.id == member.id);
-      if (index != -1) {
-        _members[index] = member;
-        notifyListeners();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .doc(member.id)
+            .update({
+          'name': member.name,
+          'mobileNumber': member.mobileNumber,
+          'dateOfBirth': member.dateOfBirth,
+          'height': member.height,
+          'weight': member.weight,
+          'photoUrl': member.photoUrl,
+          'planId': member.planId,
+          'dateOfAdmission': member.dateOfAdmission,
+          'renewalDate': member.renewalDate,
+          'expiryDate': member.expiryDate,
+          'address': member.address,
+          'gender': member.gender,
+        });
+        int index = _members.indexWhere((m) => m.id == member.id);
+        if (index != -1) {
+          _members[index] = member;
+          notifyListeners();
+        }
       }
     } catch (error) {
       print('Error updating member: $error');
@@ -174,15 +206,117 @@ class MemberProvider with ChangeNotifier {
 
   Future<void> deleteMember(Member member) async {
     try {
-      await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
-      await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('recyclebin')
+            .doc(member.id)
+            .set(member.toMap());
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(currentUser.uid)
+            .collection('members')
+            .doc(member.id)
+            .delete();
 
-      _members.removeWhere((m) => m.id == member.id);
-      notifyListeners();
+        _members.removeWhere((m) => m.id == member.id);
+        notifyListeners();
+      }
     } catch (error) {
       print('Error deleting member: $error');
     }
   }
+}
+  // Future<void> fetchActiveMembers() async {
+  //   try {
+  //     final querySnapshot = await FirebaseFirestore.instance
+  //         .collection('members')
+  //         .where('expiryDate', isGreaterThan: Timestamp.now())
+  //         .get();
+  //     _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  //     notifyListeners();
+  //   } catch (error) {
+  //     print('Error fetching active members: $error');
+  //   }
+  // }
+  //
+  // Future<void> fetchExpiredMembers() async {
+  //   try {
+  //     final querySnapshot = await FirebaseFirestore.instance
+  //         .collection('members')
+  //         .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
+  //         .get();
+  //     _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  //     notifyListeners();
+  //   } catch (error) {
+  //     print('Error fetching expired members: $error');
+  //   }
+  // }
+  // // Future<List<Member>> fetchExpiredMembers() async {
+  // //   try {
+  // //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  // //         .collection('members')
+  // //         .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
+  // //         .get();
+  // //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  // //   } catch (error) {
+  // //     print('Error fetching expired members: $error');
+  // //     return [];
+  // //   }
+  // // }
+  // //
+  // // Future<List<Member>> fetchActiveMembers() async {
+  // //   try {
+  // //     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  // //         .collection('members')
+  // //         .where('expiryDate', isGreaterThan: Timestamp.now())
+  // //         .get();
+  // //     return querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+  // //   } catch (error) {
+  // //     print('Error fetching active members: $error');
+  // //     return [];
+  // //   }
+  // // }
+  // Future<void> updateMember(Member member) async {
+  //   try {
+  //     await FirebaseFirestore.instance.collection('members').doc(member.id).update({
+  //       'name': member.name,
+  //       'mobileNumber': member.mobileNumber,
+  //       'dateOfBirth': member.dateOfBirth,
+  //       'height': member.height,
+  //       'weight': member.weight,
+  //       'photoUrl': member.photoUrl,
+  //       'planId': member.planId,
+  //       'dateOfAdmission': member.dateOfAdmission,
+  //       'renewalDate' : member.renewalDate,
+  //       'expiryDate': member.expiryDate,
+  //       'address': member.address,
+  //       'gender': member.gender,
+  //     });
+  //     int index = _members.indexWhere((m) => m.id == member.id);
+  //     if (index != -1) {
+  //       _members[index] = member;
+  //       notifyListeners();
+  //     }
+  //   } catch (error) {
+  //     print('Error updating member: $error');
+  //     throw error;
+  //   }
+  // }
+  //
+  // Future<void> deleteMember(Member member) async {
+  //   try {
+  //     await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
+  //     await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
+  //
+  //     _members.removeWhere((m) => m.id == member.id);
+  //     notifyListeners();
+  //   } catch (error) {
+  //     print('Error deleting member: $error');
+  //   }
+  // }
 
   // Future<void> restoreMember(Member member) async {
   //   try {
@@ -233,4 +367,4 @@ class MemberProvider with ChangeNotifier {
   //   }
   // }
 
-}
+//}

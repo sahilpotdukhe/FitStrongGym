@@ -1,43 +1,33 @@
-
+import 'package:flutter/material.dart';
 import 'package:arjunagym/Models/GymPlan.dart';
 import 'package:arjunagym/Models/MemberModel.dart';
 import 'package:arjunagym/Provider/MembersProvider.dart';
 import 'package:arjunagym/Provider/PlanProvider.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class EditMemberPage extends StatefulWidget {
+class RenewMembershipPage extends StatefulWidget {
   final Member member;
 
-  const EditMemberPage({required this.member});
+  const RenewMembershipPage({required this.member});
 
   @override
-  _EditMemberPageState createState() => _EditMemberPageState();
+  _RenewMembershipPageState createState() => _RenewMembershipPageState();
 }
 
-class _EditMemberPageState extends State<EditMemberPage> {
-  late TextEditingController _nameController;
-  late TextEditingController _mobileNumberController;
-  late TextEditingController _heightController;
-  late TextEditingController _weightController;
-  late TextEditingController _addressController;
-  late TextEditingController _genderController;
+class _RenewMembershipPageState extends State<RenewMembershipPage> {
   late TextEditingController _renewalDateController;
+  late TextEditingController _cashAmountController;
   bool _loading = false;
   GymPlan? _selectedPlan;
+  String? _selectedPaymentMethod;
+  final List<String> _paymentMethods = ['Cash', 'Online'];
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.member.name);
-    _mobileNumberController = TextEditingController(text: widget.member.mobileNumber);
-    _heightController = TextEditingController(text: widget.member.height.toString());
-    _weightController = TextEditingController(text: widget.member.weight.toString());
-    _addressController = TextEditingController(text: widget.member.address);
-    _genderController = TextEditingController(text: widget.member.gender);
     _renewalDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(widget.member.renewalDate));
+    _cashAmountController = TextEditingController();
   }
 
   @override
@@ -46,7 +36,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Member Details'),
+        title: Text('Renew Membership'),
       ),
       body: _loading
           ? Center(child: CircularProgressIndicator())
@@ -55,25 +45,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            TextFormField(
-              controller: _mobileNumberController,
-              decoration: InputDecoration(labelText: 'Mobile Number'),
-              keyboardType: TextInputType.phone,
-            ),
-            TextFormField(
-              controller: _heightController,
-              decoration: InputDecoration(labelText: 'Height (cm)'),
-              keyboardType: TextInputType.number,
-            ),
-            TextFormField(
-              controller: _weightController,
-              decoration: InputDecoration(labelText: 'Weight (kg)'),
-              keyboardType: TextInputType.number,
-            ),
+            Text('Name: ${widget.member.name}'),
             TextFormField(
               controller: _renewalDateController,
               decoration: InputDecoration(labelText: 'Renewal Date'),
@@ -107,11 +79,41 @@ class _EditMemberPageState extends State<EditMemberPage> {
                 });
               },
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateMemberDetails,
-              child: Text('Save Details'),
+            DropdownButtonFormField<String>(
+              value: _selectedPaymentMethod,
+              decoration: InputDecoration(labelText: 'Select Payment Method'),
+              items: _paymentMethods.map((String method) {
+                return DropdownMenuItem<String>(
+                  value: method,
+                  child: Text(method),
+                );
+              }).toList(),
+              onChanged: (String? newMethod) {
+                setState(() {
+                  _selectedPaymentMethod = newMethod;
+                });
+              },
             ),
+            if (_selectedPaymentMethod == 'Cash')
+              Padding(
+                padding:  EdgeInsets.all(18.0),
+                child: Center(child: Text('${_selectedPlan!.fee}')),
+              ),
+            if (_selectedPaymentMethod == 'Online')
+              Column(
+                children: [
+                  SizedBox(height: 20),
+                  Center(child: Text('\$ ${_selectedPlan!.fee}')),
+                  SizedBox(height: 10),
+                  Image.asset(
+                    'assets/QRcode.jpg', // Replace with your QR code image URL
+                    height: 350,
+                    width: 350,
+                  ),
+                  SizedBox(height: 10),
+                  Text('Scan the QR code to pay online'),
+                ],
+              ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _renewMembership,
@@ -123,44 +125,22 @@ class _EditMemberPageState extends State<EditMemberPage> {
     );
   }
 
-  Future<void> _updateMemberDetails() async {
-    setState(() {
-      _loading = true;
-    });
-
-    try {
-      await FirebaseFirestore.instance
-          .collection('members')
-          .doc(widget.member.id)
-          .update({
-        'name': _nameController.text,
-        'mobileNumber': _mobileNumberController.text,
-        'height': double.parse(_heightController.text),
-        'weight': double.parse(_weightController.text),
-        'address': _addressController.text,
-        'gender': _genderController.text,
-        'renewalDate': DateFormat('dd-MM-yyyy').parse(_renewalDateController.text),
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Member details updated successfully')),
-      );
-    } catch (error) {
-      print('Error updating member details: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update member details')),
-      );
-    }
-
-    setState(() {
-      _loading = false;
-    });
-  }
-
   Future<void> _renewMembership() async {
     if (_selectedPlan == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Please select a plan')),
+      );
+      return;
+    }
+    if (_selectedPaymentMethod == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a payment method')),
+      );
+      return;
+    }
+    if (_selectedPaymentMethod == 'Cash' && _cashAmountController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter the cash amount')),
       );
       return;
     }

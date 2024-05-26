@@ -11,6 +11,7 @@ class Member {
   final String photoUrl;
   final String planId;
   final DateTime dateOfAdmission;
+  final DateTime renewalDate;
   final DateTime expiryDate; // Add this field
   final String address;
   final String gender;
@@ -25,6 +26,7 @@ class Member {
     required this.photoUrl,
     required this.planId,
     required this.dateOfAdmission,
+    required this.renewalDate,
     required this.expiryDate, // Add this field
     required this.address,
     required this.gender,
@@ -41,6 +43,7 @@ class Member {
       photoUrl: photoUrl,
       planId: planId,
       dateOfAdmission: dateOfAdmission,
+      renewalDate: renewalDate,
       expiryDate: expiryDate, // Add this field
       address: address,
       gender: gender,
@@ -60,7 +63,8 @@ class Member {
       weight: weight,
       photoUrl: photoUrl,
       planId: newPlan.id,
-      dateOfAdmission: newDateOfAdmission,
+      dateOfAdmission: dateOfAdmission,
+      renewalDate: newDateOfAdmission,
       expiryDate: DateTime(newDateOfAdmission.year, newDateOfAdmission.month + newPlan.months, newDateOfAdmission.day),
       address: address,
       gender: gender,
@@ -78,6 +82,7 @@ class Member {
       'photoUrl': photoUrl,
       'planId': planId,
       'dateOfAdmission': dateOfAdmission,
+      'renewalDate': renewalDate,
       'expiryDate': expiryDate,
       'address': address,
       'gender': gender,

@@ -102,6 +102,7 @@ class _AddMemberPageState extends State<AddMemberPage> {
         photoUrl: '', // This will be updated in provider
         planId: _planId!,
         dateOfAdmission: _dateOfAdmission!,
+        renewalDate: _dateOfAdmission!,
         expiryDate: expiryDate, // Set expiry date
         address: _addressController.text,
         gender: _gender!,

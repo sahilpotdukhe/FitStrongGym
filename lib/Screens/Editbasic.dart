@@ -1,32 +1,26 @@
-
-import 'package:arjunagym/Models/GymPlan.dart';
 import 'package:arjunagym/Models/MemberModel.dart';
-import 'package:arjunagym/Provider/MembersProvider.dart';
-import 'package:arjunagym/Provider/PlanProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-class EditMemberPage extends StatefulWidget {
+class EditMemberDetailsPage extends StatefulWidget {
   final Member member;
 
-  const EditMemberPage({required this.member});
+  const EditMemberDetailsPage({required this.member});
 
   @override
-  _EditMemberPageState createState() => _EditMemberPageState();
+  _EditMemberDetailsPageState createState() => _EditMemberDetailsPageState();
 }
 
-class _EditMemberPageState extends State<EditMemberPage> {
+class _EditMemberDetailsPageState extends State<EditMemberDetailsPage> {
   late TextEditingController _nameController;
   late TextEditingController _mobileNumberController;
   late TextEditingController _heightController;
   late TextEditingController _weightController;
   late TextEditingController _addressController;
   late TextEditingController _genderController;
-  late TextEditingController _renewalDateController;
   bool _loading = false;
-  GymPlan? _selectedPlan;
+  String? _gender;
 
   @override
   void initState() {
@@ -37,13 +31,10 @@ class _EditMemberPageState extends State<EditMemberPage> {
     _weightController = TextEditingController(text: widget.member.weight.toString());
     _addressController = TextEditingController(text: widget.member.address);
     _genderController = TextEditingController(text: widget.member.gender);
-    _renewalDateController = TextEditingController(text: DateFormat('dd-MM-yyyy').format(widget.member.renewalDate));
   }
 
   @override
   Widget build(BuildContext context) {
-    final plans = Provider.of<GymPlanProvider>(context).plans;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Member Details'),
@@ -75,47 +66,34 @@ class _EditMemberPageState extends State<EditMemberPage> {
               keyboardType: TextInputType.number,
             ),
             TextFormField(
-              controller: _renewalDateController,
-              decoration: InputDecoration(labelText: 'Renewal Date'),
-              readOnly: true,
-              onTap: () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: widget.member.renewalDate,
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
-                );
-                if (pickedDate != null) {
-                  setState(() {
-                    _renewalDateController.text = DateFormat('dd-MM-yyyy').format(pickedDate);
-                  });
-                }
-              },
+              controller: _addressController,
+              decoration: InputDecoration(labelText: 'Address'),
             ),
-            DropdownButtonFormField<GymPlan>(
-              value: _selectedPlan,
-              decoration: InputDecoration(labelText: 'Select New Plan'),
-              items: plans.map((GymPlan plan) {
-                return DropdownMenuItem<GymPlan>(
-                  value: plan,
-                  child: Text(plan.name),
-                );
-              }).toList(),
-              onChanged: (GymPlan? newPlan) {
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(labelText: 'Gender'),
+              value: _gender,
+              onChanged: (value) {
                 setState(() {
-                  _selectedPlan = newPlan;
+                  _gender = value;
                 });
+              },
+              items: ['Male', 'Female', 'Other']
+                  .map((label) => DropdownMenuItem(
+                child: Text(label),
+                value: label,
+              ))
+                  .toList(),
+              validator: (value) {
+                if (value == null) {
+                  return 'Please select a gender';
+                }
+                return null;
               },
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updateMemberDetails,
               child: Text('Save Details'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _renewMembership,
-              child: Text('Renew Membership'),
             ),
           ],
         ),
@@ -138,8 +116,7 @@ class _EditMemberPageState extends State<EditMemberPage> {
         'height': double.parse(_heightController.text),
         'weight': double.parse(_weightController.text),
         'address': _addressController.text,
-        'gender': _genderController.text,
-        'renewalDate': DateFormat('dd-MM-yyyy').parse(_renewalDateController.text),
+        'gender': _gender,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -149,39 +126,6 @@ class _EditMemberPageState extends State<EditMemberPage> {
       print('Error updating member details: $error');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to update member details')),
-      );
-    }
-
-    setState(() {
-      _loading = false;
-    });
-  }
-
-  Future<void> _renewMembership() async {
-    if (_selectedPlan == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a plan')),
-      );
-      return;
-    }
-
-    setState(() {
-      _loading = true;
-    });
-
-    try {
-      final newDateOfRenewal = DateFormat('dd-MM-yyyy').parse(_renewalDateController.text);
-      final renewedMember = widget.member.renewMembership(_selectedPlan!, newDateOfRenewal);
-      await Provider.of<MemberProvider>(context, listen: false).updateMember(renewedMember);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Membership renewed successfully')),
-      );
-      Navigator.pop(context);  // Go back to the previous screen
-    } catch (error) {
-      print('Error renewing membership: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to renew membership')),
       );
     }
 

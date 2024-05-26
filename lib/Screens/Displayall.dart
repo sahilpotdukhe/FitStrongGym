@@ -1,5 +1,7 @@
 import 'package:arjunagym/Provider/MembersProvider.dart';
 import 'package:arjunagym/Provider/PlanProvider.dart';
+import 'package:arjunagym/Screens/MemberDetails.dart';
+import 'package:arjunagym/Screens/SearchScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +31,17 @@ class _DisplayallMembersState extends State<DisplayallMembers> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Members'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
+            },
+          )
+        ],
       ),
       body: members.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -36,70 +49,75 @@ class _DisplayallMembersState extends State<DisplayallMembers> {
               itemCount: members.length,
               itemBuilder: (context, index) {
                 final member = members[index];
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(member.photoUrl),
-                  ),
-                  title: Text(member.name),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Mobile Number: ${member.mobileNumber}'),
-                      Text('Date of Birth: ${DateFormat('dd-MM-yyyy').format(member.dateOfBirth)}'),
-                      Text('Height: ${member.height} cm'),
-                      Text('Weight: ${member.weight} kg'),
-                      Text('Admission Date: ${DateFormat('dd-MM-yyyy').format(member.dateOfAdmission)}'),
-                      Text('Plan Status: ${member.isExpired(Provider.of<GymPlanProvider>(context, listen: false).plans) ? 'Expired' : 'Active'}'),
-                      Text('Expiry Date: ${DateFormat('dd-MM-yyyy').format(member.expiryDate)}'),
-                    ],
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () async {
-                      // Show a confirmation dialog before deleting
-                      bool confirmDelete = await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Confirm Deletion'),
-                            content: Text('Are you sure you want to delete this member?'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: Text('Delete'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MemberDetailsPage(member: member)));
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(member.photoUrl),
+                    ),
+                    title: Text(member.name),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Mobile Number: ${member.mobileNumber}'),
+                        Text('Date of Birth: ${DateFormat('dd-MM-yyyy').format(member.dateOfBirth)}'),
+                        Text('Height: ${member.height} cm'),
+                        Text('Weight: ${member.weight} kg'),
+                        Text('Admission Date: ${DateFormat('dd-MM-yyyy').format(member.dateOfAdmission)}'),
+                        Text('Plan Status: ${member.isExpired(Provider.of<GymPlanProvider>(context, listen: false).plans) ? 'Expired' : 'Active'}'),
+                        Text('Expiry Date: ${DateFormat('dd-MM-yyyy').format(member.expiryDate)}'),
+                      ],
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        // Show a confirmation dialog before deleting
+                        bool confirmDelete = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirm Deletion'),
+                              content: Text('Are you sure you want to delete this member?'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(false),
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(true),
+                                  child: Text('Delete'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
-                      // If user confirms deletion, proceed to delete the member
-                      if (confirmDelete == true) {
-                        try {
-                          // Delete the member from the members collection
-                          await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
+                        // If user confirms deletion, proceed to delete the member
+                        if (confirmDelete == true) {
+                          try {
+                            // Delete the member from the members collection
+                            await FirebaseFirestore.instance.collection('members').doc(member.id).delete();
 
-                          // Move the member to the recyclebin collection
-                          await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
+                            // Move the member to the recyclebin collection
+                            await FirebaseFirestore.instance.collection('recyclebin').doc(member.id).set(member.toMap());
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Member deleted successfully')),
-                          );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Member deleted successfully')),
+                            );
 
-                          // Refresh the member list
-                          Provider.of<MemberProvider>(context, listen: false).getAllMembers();
-                        } catch (error) {
-                          print('Error deleting member: $error');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to delete member')),
-                          );
+                            // Refresh the member list
+                            Provider.of<MemberProvider>(context, listen: false).getAllMembers();
+                          } catch (error) {
+                            print('Error deleting member: $error');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to delete member')),
+                            );
+                          }
                         }
-                      }
-                    },
+                      },
+                    ),
                   ),
                 );
               },

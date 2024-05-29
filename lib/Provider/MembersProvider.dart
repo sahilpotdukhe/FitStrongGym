@@ -9,9 +9,13 @@ import 'package:image_picker/image_picker.dart';
 class MemberProvider with ChangeNotifier {
   List<Member> _members = [];
   List<Member> _recycleBinMembers = [];
+  List<Member> _activeMembers = [];
+  List<Member> _expiredMembers = [];
 
   List<Member> get members => _members;
   List<Member> get recycleBinMembers => _recycleBinMembers;
+  List<Member> get activeMembers => _activeMembers;
+  List<Member> get expiredMembers => _expiredMembers;
 
   MemberProvider() {
     // Fetch members when the provider is initialized
@@ -133,7 +137,7 @@ class MemberProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchActiveMembers() async {
+  Future<List<Member>> fetchActiveMembers() async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
@@ -143,15 +147,19 @@ class MemberProvider with ChangeNotifier {
             .collection('members')
             .where('expiryDate', isGreaterThan: Timestamp.now())
             .get();
-        _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        _activeMembers = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
         notifyListeners();
+        return _activeMembers;
+      }else{
+        return [];
       }
     } catch (error) {
       print('Error fetching active members: $error');
+      return [];
     }
   }
 
-  Future<void> fetchExpiredMembers() async {
+  Future<List<Member>> fetchExpiredMembers() async {
     try {
       User? currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
@@ -161,11 +169,15 @@ class MemberProvider with ChangeNotifier {
             .collection('members')
             .where('expiryDate', isLessThanOrEqualTo: Timestamp.now())
             .get();
-        _members = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
+        _expiredMembers = querySnapshot.docs.map((doc) => _memberFromSnapshot(doc)).toList();
         notifyListeners();
+        return _expiredMembers;
+      }else{
+        return [];
       }
     } catch (error) {
       print('Error fetching expired members: $error');
+      return [];
     }
   }
 

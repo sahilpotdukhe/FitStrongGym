@@ -1,3 +1,4 @@
+import 'package:arjunagym/Screens/MemberCard.dart';
 import 'package:arjunagym/Screens/MemberDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,19 +79,21 @@ class _SearchScreenState extends State<SearchScreen> {
       itemBuilder: (context, index) {
         Member searchedMember = suggestionList[index];
         return InkWell(
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  searchedMember.photoUrl.isNotEmpty
-                      ? searchedMember.photoUrl
-                      : 'https://icons.veryicon.com/png/o/miscellaneous/administration/person-16.png'),
-            ),
-            title: Text(searchedMember.name),
-            subtitle: Text('Plan: ${searchedMember.dateOfBirth}'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>MemberDetailsPage(member: searchedMember)));
-            },
-          ),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>MemberDetailsPage(member: searchedMember)));
+          },
+          child: MemberCard(member: searchedMember)
+          // ListTile(
+          //   leading: CircleAvatar(
+          //     backgroundImage: NetworkImage(
+          //         searchedMember.photoUrl.isNotEmpty
+          //             ? searchedMember.photoUrl
+          //             : 'https://icons.veryicon.com/png/o/miscellaneous/administration/person-16.png'),
+          //   ),
+          //   title: Text(searchedMember.name),
+          //   subtitle: Text('Plan: ${searchedMember.dateOfBirth}'),
+          //
+          // ),
         );
       },
     );

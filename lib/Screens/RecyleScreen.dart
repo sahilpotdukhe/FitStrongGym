@@ -31,32 +31,36 @@ class _RecycleBinPageState extends State<RecycleBinPage> {
       body: recycleBinMembers.isEmpty
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-        itemCount: recycleBinMembers.length,
-        itemBuilder: (context, index) {
-          final recycleBinMember = recycleBinMembers[index];
-          return ListTile(
-            title: Text(recycleBinMember.name),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Mobile Number: ${recycleBinMember.mobileNumber}'),
-                Text('Date of Birth: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.dateOfBirth)}'),
-                Text('Height: ${recycleBinMember.height} cm'),
-                Text('Weight: ${recycleBinMember.weight} kg'),
-                Text('Admission Date: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.dateOfAdmission)}'),
-                Text('Plan Status: ${recycleBinMember.isExpired(Provider.of<GymPlanProvider>(context, listen: false).plans) ? 'Expired' : 'Active'}'),
-                Text('Expiry Date: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.expiryDate)}'),
-              ],
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.restore),
-              onPressed: () {
-                _showConfirmationDialog(context, recycleBinMember);
+              itemCount: recycleBinMembers.length,
+              itemBuilder: (context, index) {
+                final recycleBinMember = recycleBinMembers[index];
+                return ListTile(
+                  title: Text(recycleBinMember.name),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Mobile Number: ${recycleBinMember.mobileNumber}'),
+                      Text(
+                          'Date of Birth: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.dateOfBirth)}'),
+                      Text('Height: ${recycleBinMember.height} cm'),
+                      Text('Weight: ${recycleBinMember.weight} kg'),
+                      Text(
+                          'Admission Date: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.dateOfAdmission)}'),
+                      Text(
+                          'Plan Status: ${recycleBinMember.isExpired(Provider.of<GymPlanProvider>(context, listen: false).plans) ? 'Expired' : 'Active'}'),
+                      Text(
+                          'Expiry Date: ${DateFormat('dd-MM-yyyy').format(recycleBinMember.expiryDate)}'),
+                    ],
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.restore),
+                    onPressed: () {
+                      _showConfirmationDialog(context, recycleBinMember);
+                    },
+                  ),
+                );
               },
             ),
-          );
-        },
-      ),
     );
   }
 
@@ -77,9 +81,11 @@ class _RecycleBinPageState extends State<RecycleBinPage> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
-                Provider.of<MemberProvider>(context, listen: false).restoreMember(recycleBinMember);
+                Provider.of<MemberProvider>(context, listen: false)
+                    .restoreMember(recycleBinMember);
                 // Refresh the page by re-fetching the recycle bin members
-                Provider.of<MemberProvider>(context, listen: false).fetchRecycleBinMembers();
+                Provider.of<MemberProvider>(context, listen: false)
+                    .fetchRecycleBinMembers();
               },
               child: Text('Restore'),
             ),

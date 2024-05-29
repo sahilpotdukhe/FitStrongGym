@@ -47,6 +47,9 @@ dependencies:
   lottie:
   flutter_styled_toast:
   awesome_dialog:
+  hexcolor:
+  cached_network_image:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

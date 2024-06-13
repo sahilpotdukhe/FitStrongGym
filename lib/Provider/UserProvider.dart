@@ -1,32 +1,23 @@
+import 'package:arjunagym/Resources/FirebaseResources.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:arjunagym/Models/UserModel.dart';
 
 class UserProvider with ChangeNotifier {
-  UserModel? _user;
+  UserModel? _userModel;
   bool _isLoading = false;
+  AuthMethods authMethods = AuthMethods();
 
-  UserModel? get user => _user;
+  // UserModel? get user => _user;
   bool get isLoading => _isLoading;
 
-  Future<void> fetchUser() async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(currentUser.uid)
-            .get();
+  UserModel? get getUser => _userModel;
 
-        _user = UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
-      }
-    } catch (e) {
-      print(e);
-    }
-    _isLoading = false;
+  Future<void> refreshUser() async {
+    UserModel user = await authMethods.getUserDetails();
+    _userModel = user;
+    print(_userModel);
     notifyListeners();
   }
 }

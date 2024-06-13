@@ -1,10 +1,13 @@
-import 'package:arjunagym/Provider/FirebaseResources.dart';
-import 'package:arjunagym/Provider/MembersProvider.dart';
-import 'package:arjunagym/Provider/PlanProvider.dart';
+import 'package:arjunagym/Resources/FirebaseResources.dart';
+import 'package:arjunagym/Provider/MemberProvider.dart';
+import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
-import 'package:arjunagym/Screens/AddGymPlanPage.dart';
-import 'package:arjunagym/Screens/AddMemberPage.dart';
-import 'package:arjunagym/Screens/HomeScreen.dart';
+import 'package:arjunagym/Screens/EditScreens/AddGymPlanPage.dart';
+import 'package:arjunagym/Screens/EditScreens/AddMemberPage.dart';
+import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
+import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
+import 'package:arjunagym/Screens/DashBoard.dart';
+import 'package:arjunagym/Screens/InvoicesScreens/ViewInvoicePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,15 +42,17 @@ class MyApp extends StatelessWidget {
           future: authMethods.getCurrentUser(),
           builder: (context, AsyncSnapshot<User?> snapshot) {
             if (snapshot.hasData) {
-              return HomeScreen();
+              return CustomBottomNavigationBar();
             } else {
               return  Authenticate();
             }
           },
         ),
         routes: {
+          '/home': (context) => CustomBottomNavigationBar(),
           '/add-plan': (context) => AddGymPlanPage(),
           '/add-member': (context) => AddMemberPage(),
+          '/gym-plans' : (context) => GymPlansPage()
         },
       ),
     );

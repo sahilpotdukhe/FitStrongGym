@@ -1,10 +1,12 @@
-import 'package:arjunagym/Screens/MemberCard.dart';
-import 'package:arjunagym/Screens/MemberDetails.dart';
+import 'package:arjunagym/Widgets/MemberCard.dart';
+import 'package:arjunagym/Screens/DisplayScreens/MemberDetailsPage.dart';
+import 'package:arjunagym/Widgets/SearchQuietBox.dart';
+import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:arjunagym/Models/MemberModel.dart';
-import 'package:arjunagym/Provider/MembersProvider.dart';
+import 'package:arjunagym/Provider/MemberProvider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -14,9 +16,10 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<Member> memberList = [];
+  List<MemberModel> memberList = [];
   String query = "";
   TextEditingController searchController = TextEditingController();
+  FocusNode searchFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -27,19 +30,33 @@ class _SearchScreenState extends State<SearchScreen> {
         memberList = list;
       });
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(searchFocusNode);
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: UniversalVariables.appThemeColor,
         title: TextField(
+          style: TextStyle(color: Colors.white),
           controller: searchController,
+          focusNode: searchFocusNode,
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
             hintText: 'Search',
             border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.black),
+            hintStyle: TextStyle(color: Colors.white),
           ),
           onChanged: (val) {
             setState(() {
@@ -49,9 +66,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.close),
+            icon: Icon(
+              Icons.close,
+              color: Colors.white,
+            ),
             onPressed: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) => searchController.clear());
+              WidgetsBinding.instance
+                  .addPostFrameCallback((_) => searchController.clear());
               setState(() {
                 query = "";
               });
@@ -60,42 +81,40 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
       body: query.isEmpty
-          ? Center(child: Text('No results found.'))
+          ? SearchQuietBox(
+              screen: "search",
+            )
           : buildSuggestions(query),
     );
   }
 
   buildSuggestions(String query) {
-    final List<Member> suggestionList = query.isEmpty
+    final List<MemberModel> suggestionList = query.isEmpty
         ? []
-        : memberList.where((Member member) {
-      String getName = member.name.toLowerCase();
-      String queryLower = query.toLowerCase();
-      return getName.contains(queryLower);
-    }).toList();
+        : memberList.where((MemberModel member) {
+            String getName = member.name.toLowerCase();
+            String queryLower = query.toLowerCase();
+            return getName.contains(queryLower);
+          }).toList();
 
-    return ListView.builder(
-      itemCount: suggestionList.length,
-      itemBuilder: (context, index) {
-        Member searchedMember = suggestionList[index];
-        return InkWell(
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MemberDetailsPage(member: searchedMember)));
-          },
-          child: MemberCard(member: searchedMember)
-          // ListTile(
-          //   leading: CircleAvatar(
-          //     backgroundImage: NetworkImage(
-          //         searchedMember.photoUrl.isNotEmpty
-          //             ? searchedMember.photoUrl
-          //             : 'https://icons.veryicon.com/png/o/miscellaneous/administration/person-16.png'),
-          //   ),
-          //   title: Text(searchedMember.name),
-          //   subtitle: Text('Plan: ${searchedMember.dateOfBirth}'),
-          //
-          // ),
-        );
-      },
-    );
+    return suggestionList.isEmpty
+        ? SearchQuietBox(
+            screen: "empty",
+          )
+        : ListView.builder(
+            itemCount: suggestionList.length,
+            itemBuilder: (context, index) {
+              MemberModel searchedMember = suggestionList[index];
+              return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MemberDetailsPage(member: searchedMember)));
+                  },
+                  child: MemberCard(member: searchedMember));
+            },
+          );
   }
 }

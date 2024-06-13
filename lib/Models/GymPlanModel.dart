@@ -1,19 +1,20 @@
-class GymPlan {
+class GymPlanModel {
   final String id;
   final String name;
   final int months;
   final double fee;
   final bool personalTraining;
 
-  GymPlan({
+  GymPlanModel({
     required this.id,
     required this.name,
     required this.months,
     required this.fee,
     required this.personalTraining,
   });
+
   // Add this method
-  static GymPlan? findById(List<GymPlan> plans, String id) {
+  static GymPlanModel? findById(List<GymPlanModel> plans, String id) {
     try {
       return plans.firstWhere((plan) => plan.id == id);
     } catch (e) {

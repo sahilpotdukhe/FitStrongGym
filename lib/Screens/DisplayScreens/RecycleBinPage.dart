@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:arjunagym/Models/MemberModel.dart';
-import 'package:arjunagym/Provider/MembersProvider.dart';
-import 'package:arjunagym/Provider/PlanProvider.dart';
+import 'package:arjunagym/Provider/MemberProvider.dart';
+import 'package:arjunagym/Provider/GymPlanProvider.dart';
 
 class RecycleBinPage extends StatefulWidget {
   @override
@@ -27,6 +27,12 @@ class _RecycleBinPageState extends State<RecycleBinPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Recycle Bin Members'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/home');
+          },
+          icon: Icon(Icons.arrow_back_outlined),
+        ),
       ),
       body: recycleBinMembers.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -64,7 +70,7 @@ class _RecycleBinPageState extends State<RecycleBinPage> {
     );
   }
 
-  void _showConfirmationDialog(BuildContext context, Member recycleBinMember) {
+  void _showConfirmationDialog(BuildContext context, MemberModel recycleBinMember) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

@@ -50,6 +50,13 @@ dependencies:
   hexcolor:
   cached_network_image:
   path_provider:
+  curved_navigation_bar:
+  font_awesome_flutter: ^10.7.0
+  flutter_sms:
+    path: D:\AndroidStudioProjects\flutter_sms-master
+  url_launcher: ^6.2.6
+  pdf: ^3.10.8
+  open_file_plus: ^3.4.1+1
 
 dev_dependencies:
   flutter_test:

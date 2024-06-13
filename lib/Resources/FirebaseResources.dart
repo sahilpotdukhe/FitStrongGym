@@ -1,17 +1,18 @@
 import 'package:arjunagym/Models/UserModel.dart';
-import 'package:arjunagym/Screens/HomeScreen.dart';
-import 'package:arjunagym/Screens/LoginScreen.dart';
+import 'package:arjunagym/Screens/DashBoard.dart';
+import 'package:arjunagym/Screens/AuthenticationScreens/LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
+
 class Authenticate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_auth.currentUser != null) {
-      return HomeScreen();
+      return DashBoard();
     } else {
       return LoginScreen();
     }
@@ -27,44 +28,51 @@ class AuthMethods {
     return currentUser;
   }
 
-  Future<UserModel> getUserDetails() async{
+  Future<UserModel> getUserDetails() async {
     User? currentUser = await getCurrentUser();
-    DocumentSnapshot documentSnapshot = await firestore.collection("Users").doc(currentUser!.uid).get();
-    return UserModel.fromMap(documentSnapshot.data() as Map<String,dynamic>);
+    DocumentSnapshot documentSnapshot =
+        await firestore.collection("Users").doc(currentUser!.uid).get();
+    return UserModel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
   }
 
-  Future<UserModel> getUserDetailsById(id) async{
-    DocumentSnapshot documentSnapshot = await firestore.collection("Users").doc(id).get();
-    return UserModel.fromMap(documentSnapshot.data() as Map<String,dynamic>);
+  Future<UserModel> getUserDetailsById(id) async {
+    DocumentSnapshot documentSnapshot =
+        await firestore.collection("Users").doc(id).get();
+    return UserModel.fromMap(documentSnapshot.data() as Map<String, dynamic>);
   }
 
-  Future<User?> createAccountbyEmail(String email, String password, BuildContext context) async{
-    try{
-      User? user = (await _auth.createUserWithEmailAndPassword(email: email, password: password)).user;
-      if(user != null){
+  Future<User?> createAccountbyEmail(
+      String email, String password, BuildContext context) async {
+    try {
+      User? user = (await _auth.createUserWithEmailAndPassword(
+              email: email, password: password))
+          .user;
+      if (user != null) {
         print("User Created Successfully");
         return user;
-      }else{
+      } else {
         print("Account creation failed");
         return user;
       }
-    }catch(e){
+    } catch (e) {
       print(e);
       return null;
     }
   }
 
-  Future<User?> logInByEmail(String email, String password) async{
-    try{
-      User? user = (await _auth.signInWithEmailAndPassword(email: email, password: password)).user;
-      if(user != null){
+  Future<User?> logInByEmail(String email, String password) async {
+    try {
+      User? user = (await _auth.signInWithEmailAndPassword(
+              email: email, password: password))
+          .user;
+      if (user != null) {
         print("Login Successful");
         return user;
-      }else{
+      } else {
         print("Login failed");
         return user;
       }
-    }catch(e){
+    } catch (e) {
       print(e);
       return null;
     }
@@ -85,9 +93,13 @@ class AuthMethods {
     }
   }
 
-  void setUserProfile({String? name,String? email, var mobilenumber, var profilePic,String? authType}) async {
-    await firestore.collection("Users").doc(_auth.currentUser!.uid)
-        .set({
+  void setUserProfile(
+      {String? name,
+      String? email,
+      var mobilenumber,
+      var profilePic,
+      String? authType}) async {
+    await firestore.collection("Users").doc(_auth.currentUser!.uid).set({
       "name": name,
       "email": email,
       "uid": _auth.currentUser!.uid,
@@ -97,28 +109,27 @@ class AuthMethods {
   }
 
   Future<bool> checkAlreadyRegistered(String email) async {
-    QuerySnapshot result = await firestore.collection("Users").
-    where("email", isEqualTo: email).
-    get();
+    QuerySnapshot result = await firestore
+        .collection("Users")
+        .where("email", isEqualTo: email)
+        .get();
     final List<DocumentSnapshot> docs = result.docs;
     // If user is already registered means it has entry in the firestore database so the doc length will be equal to or greater than 1
     return docs.isNotEmpty ? true : false;
   }
 
   Future<List<UserModel>> fetchAllUsers(User currentUser) async {
-    List<UserModel> userList =[];
+    List<UserModel> userList = [];
     QuerySnapshot querySnapshot = await firestore.collection("Users").get();
     for (var i = 0; i < querySnapshot.docs.length; i++) {
       if (querySnapshot.docs[i].id != currentUser.uid) {
-        userList.add(UserModel.fromMap(querySnapshot.docs[i].data() as Map<String, dynamic>));
+        userList.add(UserModel.fromMap(
+            querySnapshot.docs[i].data() as Map<String, dynamic>));
       }
     }
     return userList;
   }
 
-
-
   Stream<DocumentSnapshot> getUserStream({required String uid}) =>
       firestore.collection("Users").doc(uid).snapshots();
 }
-

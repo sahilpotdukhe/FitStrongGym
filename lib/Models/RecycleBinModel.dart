@@ -1,4 +1,4 @@
-class RecycleBinMember {
+class RecycleBinModel {
   final String id;
   final String name;
   final String mobileNumber;
@@ -12,7 +12,7 @@ class RecycleBinMember {
   final String address;
   final String gender;
 
-  RecycleBinMember({
+  RecycleBinModel({
     required this.id,
     required this.name,
     required this.mobileNumber,
@@ -28,8 +28,8 @@ class RecycleBinMember {
   });
 
   // Factory method to create RecycleBinMember from a map
-  factory RecycleBinMember.fromMap(Map<String, dynamic> map, String id) {
-    return RecycleBinMember(
+  factory RecycleBinModel.fromMap(Map<String, dynamic> map, String id) {
+    return RecycleBinModel(
       id: id,
       name: map['name'],
       mobileNumber: map['mobileNumber'],

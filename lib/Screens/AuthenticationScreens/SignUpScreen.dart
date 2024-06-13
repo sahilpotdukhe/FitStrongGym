@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:arjunagym/Provider/FirebaseResources.dart';
-import 'package:arjunagym/Screens/HomeScreen.dart';
-import 'package:arjunagym/Screens/ScaleUtils.dart';
-import 'package:arjunagym/Screens/UniversalVariables.dart';
-import 'package:arjunagym/Screens/loading.dart';
+import 'package:arjunagym/Resources/FirebaseResources.dart';
+import 'package:arjunagym/Screens/DashBoard.dart';
+import 'package:arjunagym/Widgets/ScaleUtils.dart';
+import 'package:arjunagym/Widgets/UniversalVariables.dart';
+import 'package:arjunagym/Widgets/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await Future.delayed(Duration(seconds: 6));
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => DashBoard()),
           (route) => false);
     } else {
       // setState(() {
@@ -338,8 +338,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: (_isLoading)
                               ? Loading()
                               : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: UniversalVariables.appThemeColor),
+                                  style: ElevatedButton.styleFrom(
+                                      primary:
+                                          UniversalVariables.appThemeColor),
                                   onPressed: () async {
                                     if (_signupkey.currentState!.validate()) {
                                       setState(() {

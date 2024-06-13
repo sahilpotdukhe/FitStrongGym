@@ -1,7 +1,7 @@
 // utility class to hold screen dimensions and scale factors
 import 'dart:math';
 
-import 'package:arjunagym/Screens/globals.dart';
+import 'package:arjunagym/Widgets/globals.dart';
 import 'package:flutter/material.dart';
 
 class ScaleUtils {
@@ -14,8 +14,8 @@ class ScaleUtils {
   static void init(BuildContext context) {
     _height = MediaQuery.of(context).size.height;
     _width = MediaQuery.of(context).size.width;
-    _verticalScale = _height / mockUpHeight; // use a more descriptive name
-    _horizontalScale = _width / mockUpWidth; // use a more descriptive name
+    _verticalScale = _height / mockUpHeight;
+    _horizontalScale = _width / mockUpWidth;
     _scaleFactor = max(_horizontalScale, _verticalScale); // use min to ensure scale factor is not too large
   }
 

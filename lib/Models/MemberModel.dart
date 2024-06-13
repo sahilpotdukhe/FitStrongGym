@@ -1,7 +1,7 @@
-import 'package:arjunagym/Models/GymPlan.dart';
+import 'package:arjunagym/Models/GymPlanModel.dart';
 import 'package:intl/intl.dart';
 
-class Member {
+class MemberModel {
   final String id;
   final String name;
   final String mobileNumber;
@@ -16,7 +16,7 @@ class Member {
   final String address;
   final String gender;
 
-  Member({
+  MemberModel({
     required this.id,
     required this.name,
     required this.mobileNumber,
@@ -32,8 +32,8 @@ class Member {
     required this.gender,
   });
 
-  Member copyWith({String? id}) {
-    return Member(
+  MemberModel copyWith({String? id}) {
+    return MemberModel(
       id: id ?? this.id,
       name: name,
       mobileNumber: mobileNumber,
@@ -44,17 +44,19 @@ class Member {
       planId: planId,
       dateOfAdmission: dateOfAdmission,
       renewalDate: renewalDate,
-      expiryDate: expiryDate, // Add this field
+      expiryDate: expiryDate,
+      // Add this field
       address: address,
       gender: gender,
     );
   }
 
-  bool isExpired(List<GymPlan> plans) {
+  bool isExpired(List<GymPlanModel> plans) {
     return DateTime.now().isAfter(expiryDate);
   }
-  Member renewMembership(GymPlan newPlan, DateTime newDateOfAdmission) {
-    return Member(
+
+  MemberModel renewMembership(GymPlanModel newPlan, DateTime newDateOfAdmission) {
+    return MemberModel(
       id: id,
       name: name,
       mobileNumber: mobileNumber,
@@ -65,7 +67,8 @@ class Member {
       planId: newPlan.id,
       dateOfAdmission: dateOfAdmission,
       renewalDate: newDateOfAdmission,
-      expiryDate: DateTime(newDateOfAdmission.year, newDateOfAdmission.month + newPlan.months, newDateOfAdmission.day),
+      expiryDate: DateTime(newDateOfAdmission.year,
+          newDateOfAdmission.month + newPlan.months, newDateOfAdmission.day),
       address: address,
       gender: gender,
     );

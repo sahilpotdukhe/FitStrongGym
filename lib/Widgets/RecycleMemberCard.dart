@@ -3,6 +3,7 @@ import 'package:arjunagym/Models/MemberModel.dart';
 import 'package:arjunagym/Provider/MemberProvider.dart';
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Screens/EditScreens/EditMemberDetailsPage.dart';
+import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:arjunagym/Screens/EditScreens/RenewMembershipPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -28,17 +29,18 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
     final plans = Provider.of<GymPlanProvider>(context, listen: false).plans;
     final plan = GymPlanModel.findById(plans, widget.recycleBinMember.planId);
     final planName = plan?.name ?? 'Unknown Plan';
+    ScaleUtils.init(context);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding:  EdgeInsets.all(8.0*ScaleUtils.scaleFactor),
       child: Card(
         elevation: 15,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(30*ScaleUtils.scaleFactor),
             color: Colors.black,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:  EdgeInsets.all(8.0*ScaleUtils.scaleFactor),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,10 +48,10 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0*ScaleUtils.scaleFactor),
                       child: Container(
-                        height: 80,
-                        width: 80,
+                        height: 80*ScaleUtils.verticalScale,
+                        width: 80*ScaleUtils.horizontalScale,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               image: CachedNetworkImageProvider(
@@ -60,7 +62,7 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
                       ),
                     ),
                     SizedBox(
-                      width: 40,
+                      width: 40*ScaleUtils.horizontalScale,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,36 +71,36 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
                           children: [
                             Text(
                               'Name: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
-                            Text(widget.recycleBinMember.name,style: TextStyle(color: Colors.white),),
+                            Text(widget.recycleBinMember.name,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
                               'Address: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
-                            Text(widget.recycleBinMember.address,style: TextStyle(color: Colors.white),),
+                            Text(widget.recycleBinMember.address,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
                               'Gender: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
-                            Text(widget.recycleBinMember.gender,style: TextStyle(color: Colors.white),),
+                            Text(widget.recycleBinMember.gender,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
                               'Mobile: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
-                            Text(widget.recycleBinMember.mobileNumber,style: TextStyle(color: Colors.white),),
+                            Text(widget.recycleBinMember.mobileNumber,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                       ],
@@ -129,20 +131,20 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
                           children: [
                             Text(
                               'Date of Birth: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
                             Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.dateOfBirth)}',style: TextStyle(color: Colors.white),),
+                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.dateOfBirth)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
                               'Admission Date: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
                             Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.dateOfAdmission)}',style: TextStyle(color: Colors.white),),
+                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.dateOfAdmission)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                       ],
@@ -154,19 +156,19 @@ class _RecycleMemberCardState extends State<RecycleMemberCard> {
                           children: [
                             Text(
                               'Plan: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
-                            Text(planName,style: TextStyle(color: Colors.white),),
+                            Text(planName,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
                               'Expiry Date: ',
-                              style: TextStyle(color: Colors.grey),
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
                             ),
                             Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.expiryDate)}',style: TextStyle(color: Colors.white),),
+                              '${DateFormat('dd-MM-yyyy').format(widget.recycleBinMember.expiryDate)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
                           ],
                         ),
                       ],

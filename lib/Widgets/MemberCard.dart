@@ -62,48 +62,50 @@ class _MemberCardState extends State<MemberCard> {
                   SizedBox(
                     width: 40*ScaleUtils.horizontalScale,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Name: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(widget.member.name,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Address: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(widget.member.address,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Gender: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(widget.member.gender,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Mobile: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(widget.member.mobileNumber,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                    ],
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Name: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ),
+                            Flexible(child: Text(widget.member.name,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Address: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ),
+                            Flexible(child: Text(widget.member.address,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Gender: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ), 
+                            Flexible(child: Text(widget.member.gender,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),)),
+                          ],
+                        ),
+                        Row(
+                          children: [ 
+                            Text(
+                              'Mobile: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ),
+                            Flexible(child: Text(widget.member.mobileNumber,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Spacer(),
+                  //Spacer(),
                   IconButton(
                     icon: Icon(
                       Icons.delete,
@@ -180,54 +182,67 @@ class _MemberCardState extends State<MemberCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Date of Birth: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                          Row(
+                            children: [
+                              Text(
+                                'Date of Birth: ',
+                                style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                              ),
+                              Flexible(
+                                child: Text(
+                                    '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfBirth)}',overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
+                              ),
+                            ],
                           ),
-                          Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfBirth)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
+                          Row(
+                            children: [
+                              Text(
+                                'Admission Date: ',
+                                style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                              ),
+                              Flexible(
+                                child: Text(
+                                    '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfAdmission)}',overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            'Admission Date: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfAdmission)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Plan: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(planName,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Expiry Date: ',
-                            style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
-                          ),
-                          Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.expiryDate)}',style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
-                        ],
-                      ),
-                    ],
+                  Flexible( 
+                    child: Column( 
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Plan: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ),
+                            Flexible(child: Text(planName,overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Expiry Date: ',
+                              style: TextStyle(color: Colors.grey,fontSize: 13*ScaleUtils.scaleFactor),
+                            ),
+                            Flexible(
+                              child: Text(
+                                  '${DateFormat('dd-MM-yyyy').format(widget.member.expiryDate)}',overflow:TextOverflow.ellipsis,style: TextStyle(color: Colors.white,fontSize: 13*ScaleUtils.scaleFactor),),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),

@@ -1,3 +1,4 @@
+import 'package:arjunagym/Models/UserModel.dart';
 import 'package:arjunagym/Resources/FirebaseResources.dart';
 import 'package:arjunagym/Provider/MemberProvider.dart';
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
@@ -9,6 +10,7 @@ import 'package:arjunagym/Screens/DisplayScreens/DisplayAllMembers.dart';
 import 'package:arjunagym/Screens/DisplayScreens/ExpiredMembersPage.dart';
 import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
 import 'package:arjunagym/Models/InvoiceModel.dart';
+import 'package:arjunagym/Screens/SplashScreen.dart';
 import 'package:arjunagym/Widgets/MemberCard.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberListPage.dart';
 import 'package:arjunagym/Screens/MenuPage.dart';
@@ -41,6 +43,8 @@ class _DashBoardState extends State<DashBoard> {
     gymPlanProvider.fetchPlans(); // Fetch plans
     memberProvider.fetchActiveMembers();
     memberProvider.fetchExpiredMembers();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.refreshUser();
   }
 
   @override
@@ -53,12 +57,14 @@ class _DashBoardState extends State<DashBoard> {
     // final active = memberProvider.fetchActiveMembers();
     final activemembers = memberProvider.activeMembers;
     final expiredmembers = memberProvider.expiredMembers;
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    UserModel? userModel = userProvider.getUser;
     AuthMethods authMethods = AuthMethods();
     ScaleUtils.init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Arjuna Fitness Gym",
+          userModel?.name ?? 'Gym',
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -67,7 +73,7 @@ class _DashBoardState extends State<DashBoard> {
         leading: IconButton(
           icon: Icon(Icons.nat,color: Colors.white,),
           onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MenuPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
           },
         ),
       ),

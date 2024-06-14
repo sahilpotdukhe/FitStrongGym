@@ -1,5 +1,8 @@
 import 'package:arjunagym/Models/UserModel.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
+import 'package:arjunagym/Resources/FirebaseResources.dart';
+import 'package:arjunagym/Screens/DisplayScreens/DisplayAllMembers.dart';
+import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
 import 'package:arjunagym/Screens/EditScreens/AddGymPlanPage.dart';
 import 'package:arjunagym/Screens/EditScreens/AddMemberPage.dart';
 import 'package:arjunagym/Screens/ProfilePage.dart';
@@ -7,6 +10,8 @@ import 'package:arjunagym/Screens/DisplayScreens/RecycleBinPage.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,6 +26,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  AuthMethods authMethods = AuthMethods();
 
   @override
   void initState() {
@@ -57,7 +63,9 @@ class _MenuPageState extends State<MenuPage>
             Icons.arrow_back_outlined,
             color: UniversalVariables.appThemeColor,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/home');
+          },
         ),
       ),
       body: userModel == null
@@ -73,14 +81,14 @@ class _MenuPageState extends State<MenuPage>
                             builder: (context) => ProfilePage()));
                   },
                   child: Card(
-                    elevation: 10,
+                    elevation: 20,
                     shadowColor: Colors.grey,
                     child: Container(
                       width: ScaleUtils.width,
                       height: 130,
                       // color: Colors.red,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.black,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -112,7 +120,7 @@ class _MenuPageState extends State<MenuPage>
                                   userModel.name,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 20 * ScaleUtils.scaleFactor,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -120,12 +128,15 @@ class _MenuPageState extends State<MenuPage>
                                   userModel.email,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 14 * ScaleUtils.scaleFactor),
+                                    color: Colors.white,
+                                      fontSize: 14 * ScaleUtils.scaleFactor,fontWeight: FontWeight.w300),
                                 ),
                                 Text(
                                   userModel.phoneNumber,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
+                                    color: Colors.white,
+                                      fontWeight: FontWeight.w300,
                                       fontSize: 14 * ScaleUtils.scaleFactor),
                                 ),
                               ],
@@ -133,7 +144,7 @@ class _MenuPageState extends State<MenuPage>
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_forward_ios_sharp),
+                            child: Icon(Icons.arrow_forward_ios_sharp,color: Colors.white,),
                           )
                         ],
                       ),
@@ -143,149 +154,257 @@ class _MenuPageState extends State<MenuPage>
                 SizedBox(
                   height: 30,
                 ),
-                Card(
-                  elevation: 10,
-                  shadowColor: Colors.grey,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Card(
+                    elevation: 10,
+                    shadowColor: Colors.grey,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12),
+                        child: Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddMemberPage()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(child: Icon(Icons.person_add))),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Add new Member',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DisplayAllMembers()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(child: FaIcon(FontAwesomeIcons.addressCard),)),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'All Members',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddGymPlanPage()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(child: Icon(Icons.add_card))),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Add Gym Plan',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GymPlansPage()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(child: Icon(Icons.fitness_center))),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'All Gym Plans',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => RecycleBinPage()));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(
+                                            child: Icon(Icons.delete_forever))),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Recycle Bin',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                final Uri url = Uri.parse(
+                                    'https://sahilpotdukhe.github.io/Portfolio-website/');
+                                try {
+                                  await launchUrl(url);
+                                } catch (e) {
+                                  print(e.toString());
+                                }
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: UniversalVariables.bgColor,
+                                        ),
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(child: Icon(Icons.code))),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'About Developer',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                    Spacer(),
+                                    Icon(Icons.arrow_forward_ios_sharp)
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddGymPlanPage()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
-                            child: Row(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: UniversalVariables.bgColor,
-                                    ),
-                                    height: 40,
-                                    width: 40,
-                                    child: Center(child: Icon(Icons.add))),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Add Gym Plan',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_sharp)
-                              ],
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Padding(
+                  padding: const EdgeInsets.all(28.0),
+                  child: InkWell(
+                    onTap: () {
+                      authMethods.logOut(context);
+                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {return NewLoginScreen();}));
+                      showToast(
+                          "Account Logging Out....", backgroundColor: Colors.red,
+                          context: context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            20 * ScaleUtils.scaleFactor),
+                        color: HexColor("EE3427"),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0 * ScaleUtils.scaleFactor),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Logout",
+                              style: TextStyle(fontSize: 16 * ScaleUtils.scaleFactor,
+                                  color: Colors.white),
                             ),
-                          ),
+                            SizedBox(width: 8 * ScaleUtils.horizontalScale,),
+                            Icon(Icons.logout, color: Colors.white,)
+                          ],
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddMemberPage()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
-                            child: Row(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: UniversalVariables.bgColor,
-                                    ),
-                                    height: 40,
-                                    width: 40,
-                                    child: Center(child: Icon(Icons.add))),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Add new Member',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_sharp)
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RecycleBinPage()));
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
-                            child: Row(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: UniversalVariables.bgColor,
-                                    ),
-                                    height: 40,
-                                    width: 40,
-                                    child: Center(
-                                        child: Icon(Icons.delete_forever))),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Recycle Bin',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_sharp)
-                              ],
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            final Uri url = Uri.parse(
-                                'https://sahilpotdukhe.github.io/Portfolio-website/');
-                            try {
-                              await launchUrl(url);
-                            } catch (e) {
-                              print(e.toString());
-                            }
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(18, 10, 18, 10),
-                            child: Row(
-                              children: [
-                                Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: UniversalVariables.bgColor,
-                                    ),
-                                    height: 40,
-                                    width: 40,
-                                    child: Center(child: Icon(Icons.code))),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'About Developer',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                Spacer(),
-                                Icon(Icons.arrow_forward_ios_sharp)
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),

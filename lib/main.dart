@@ -8,6 +8,7 @@ import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
 import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
 import 'package:arjunagym/Screens/DashBoard.dart';
 import 'package:arjunagym/Screens/InvoicesScreens/ViewInvoicePage.dart';
+import 'package:arjunagym/Screens/SplashScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           future: authMethods.getCurrentUser(),
           builder: (context, AsyncSnapshot<User?> snapshot) {
             if (snapshot.hasData) {
-              return CustomBottomNavigationBar();
+              return SplashScreen();
             } else {
               return  Authenticate();
             }

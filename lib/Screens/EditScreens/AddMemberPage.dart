@@ -534,8 +534,9 @@ class _AddMemberPageState extends State<AddMemberPage> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     onPressed: _saveForm,
-                    child: Text('Save Member'),
+                    child: Text('Save Member',style: TextStyle(color: Colors.white),),
                   ),
                 ],
               ),

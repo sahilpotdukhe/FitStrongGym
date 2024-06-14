@@ -34,6 +34,29 @@ class _GymPlansPageState extends State<GymPlansPage> {
           'Gym Plans',
           style: TextStyle(color: Colors.white),
         ),
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, '/home');
+          },
+          icon: Icon(Icons.arrow_back_outlined),
+        ),
+        actions: [
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>AddGymPlanPage()));
+            },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                            'Add',
+                            style: TextStyle(
+                  color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                          ),
+              ))
+        ],
         backgroundColor: UniversalVariables.appThemeColor,
       ),
       body: ListView.builder(

@@ -2,6 +2,7 @@
 import 'package:arjunagym/Resources/FirebaseResources.dart';
 import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
 import 'package:arjunagym/Screens/DashBoard.dart';
+import 'package:arjunagym/Screens/SplashScreen.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Screens/AuthenticationScreens/SignUpScreen.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
@@ -407,7 +408,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          CustomBottomNavigationBar()),
+                                                          SplashScreen()),
                                                   (route) => false);
                                               setState(() {
                                                 _isLoading = false;

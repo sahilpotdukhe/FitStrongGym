@@ -108,6 +108,14 @@ class AuthMethods {
     });
   }
 
+  Future<void> updateUser(UserModel user) async {
+    await firestore.collection('Users').doc(user.uid).update({
+      'name': user.name,
+      'phone_Number': user.phoneNumber,
+      'profile_photo': user.profilePhoto,
+    });
+  }
+
   Future<bool> checkAlreadyRegistered(String email) async {
     QuerySnapshot result = await firestore
         .collection("Users")

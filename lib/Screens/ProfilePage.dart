@@ -1,6 +1,7 @@
 import 'package:arjunagym/Models/UserModel.dart';
 import 'package:arjunagym/Resources/FirebaseResources.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
+import 'package:arjunagym/Screens/EditScreens/EditProfilePage.dart';
 import 'package:arjunagym/Widgets/FullImageWidget.dart';
 import 'package:arjunagym/Models/InvoiceModel.dart';
 import 'package:arjunagym/Resources/PdfApi.dart';
@@ -93,34 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/searchScreen');
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            20 * ScaleUtils.scaleFactor),
-                        color: HexColor("3957ED"),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(12.0 * ScaleUtils.scaleFactor),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Message Friend",
-                              style: TextStyle(
-                                  fontSize: 14 * ScaleUtils.scaleFactor,
-                                  color: Colors.white),
-                            ),
-                            SizedBox(width: 8 * ScaleUtils.horizontalScale,),
-                            Icon(Icons.message, color: Colors.white,)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      //Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfile()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage(userModel: userModel)));
                     },
                     child: Container(
                       decoration: BoxDecoration(

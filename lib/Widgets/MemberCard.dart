@@ -35,7 +35,7 @@ class _MemberCardState extends State<MemberCard> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Colors.white,
+            color: Colors.black,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -69,7 +69,7 @@ class _MemberCardState extends State<MemberCard> {
                             'Name: ',
                             style: TextStyle(color: Colors.grey),
                           ),
-                          Text(widget.member.name),
+                          Text(widget.member.name,style: TextStyle(color: Colors.white),),
                         ],
                       ),
                       Row(
@@ -78,7 +78,7 @@ class _MemberCardState extends State<MemberCard> {
                             'Address: ',
                             style: TextStyle(color: Colors.grey),
                           ),
-                          Text(widget.member.address),
+                          Text(widget.member.address,style: TextStyle(color: Colors.white),),
                         ],
                       ),
                       Row(
@@ -87,7 +87,7 @@ class _MemberCardState extends State<MemberCard> {
                             'Gender: ',
                             style: TextStyle(color: Colors.grey),
                           ),
-                          Text(widget.member.gender),
+                          Text(widget.member.gender,style: TextStyle(color: Colors.white),),
                         ],
                       ),
                       Row(
@@ -96,7 +96,7 @@ class _MemberCardState extends State<MemberCard> {
                             'Mobile: ',
                             style: TextStyle(color: Colors.grey),
                           ),
-                          Text(widget.member.mobileNumber),
+                          Text(widget.member.mobileNumber,style: TextStyle(color: Colors.white),),
                         ],
                       ),
                     ],
@@ -188,7 +188,7 @@ class _MemberCardState extends State<MemberCard> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfBirth)}'),
+                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfBirth)}',style: TextStyle(color: Colors.white),),
                         ],
                       ),
                       Row(
@@ -198,7 +198,7 @@ class _MemberCardState extends State<MemberCard> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfAdmission)}'),
+                              '${DateFormat('dd-MM-yyyy').format(widget.member.dateOfAdmission)}',style: TextStyle(color: Colors.white),),
                         ],
                       ),
                     ],
@@ -212,7 +212,7 @@ class _MemberCardState extends State<MemberCard> {
                             'Plan: ',
                             style: TextStyle(color: Colors.grey),
                           ),
-                          Text(planName),
+                          Text(planName,style: TextStyle(color: Colors.white),),
                         ],
                       ),
                       Row(
@@ -222,7 +222,7 @@ class _MemberCardState extends State<MemberCard> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Text(
-                              '${DateFormat('dd-MM-yyyy').format(widget.member.expiryDate)}'),
+                              '${DateFormat('dd-MM-yyyy').format(widget.member.expiryDate)}',style: TextStyle(color: Colors.white),),
                         ],
                       ),
                     ],
@@ -247,9 +247,16 @@ class _MemberCardState extends State<MemberCard> {
                         );
                       },
                       child: Container(
-                        color: HexColor('D4D6FF'),
+                        decoration: BoxDecoration(
+                          border: Border(top: BorderSide(color: Colors.grey, width:1)),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                          color: HexColor('D4D6FF'),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -276,9 +283,16 @@ class _MemberCardState extends State<MemberCard> {
                         );
                       },
                       child: Container(
-                        color: Colors.black,
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                          border: Border(top: BorderSide(color: Colors.white, width: 1)),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

@@ -1,5 +1,8 @@
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
+import 'package:arjunagym/Widgets/ScaleUtils.dart';
+import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:arjunagym/Models/GymPlanModel.dart';
 
@@ -30,9 +33,12 @@ class _EditPlanPageState extends State<EditPlanPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScaleUtils.init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Plan'),
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: UniversalVariables.appThemeColor,
+        title: Text('Edit Plan',style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -40,9 +46,29 @@ class _EditPlanPageState extends State<EditPlanPage> {
           key: _formKey,
           child: Column(
             children: [
+              SizedBox(height: 10,),
               TextFormField(
                 initialValue: _name,
-                decoration: InputDecoration(labelText: 'Plan Name'),
+                decoration: InputDecoration(
+                  hintText: 'Update Plan Name',
+                  labelText: 'Plan Name',
+                  labelStyle: TextStyle(
+                      fontSize: 16.0 * ScaleUtils.scaleFactor),
+                  floatingLabelStyle: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18 * ScaleUtils.scaleFactor,
+                      color: HexColor('3957ED')),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: HexColor('3957ED'), width: 2)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: HexColor('3957ED'), width: 2),
+                  ),
+                  suffixIcon:
+                  Icon(Icons.drive_file_rename_outline, color: HexColor('3957ED')),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the plan name';
@@ -51,9 +77,29 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 },
                 onSaved: (value) => _name = value!,
               ),
+              SizedBox(height: 14,),
               TextFormField(
                 initialValue: _months.toString(),
-                decoration: InputDecoration(labelText: 'Duration (Months)'),
+                decoration: InputDecoration(
+                  hintText: 'Update Duration',
+                  labelText: 'Duration(Months)',
+                  labelStyle: TextStyle(
+                      fontSize: 16.0 * ScaleUtils.scaleFactor),
+                  floatingLabelStyle: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18 * ScaleUtils.scaleFactor,
+                      color: HexColor('3957ED')),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: HexColor('3957ED'), width: 2)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: HexColor('3957ED'), width: 2),
+                  ),
+                  suffixIcon:
+                  Icon(Icons.calendar_month_sharp, color: HexColor('3957ED')),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -63,9 +109,29 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 },
                 onSaved: (value) => _months = int.parse(value!),
               ),
+              SizedBox(height: 14,),
               TextFormField(
                 initialValue: _fee.toString(),
-                decoration: InputDecoration(labelText: 'Fee'),
+                decoration: InputDecoration(
+                  hintText: 'Update Fee',
+                  labelText: 'Fee',
+                  labelStyle: TextStyle(
+                      fontSize: 16.0 * ScaleUtils.scaleFactor),
+                  floatingLabelStyle: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18 * ScaleUtils.scaleFactor,
+                      color: HexColor('3957ED')),
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: HexColor('3957ED'), width: 2)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: HexColor('3957ED'), width: 2),
+                  ),
+                  suffixIcon:
+                  Icon(Icons.money, color: HexColor('3957ED')),
+                ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -75,6 +141,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                 },
                 onSaved: (value) => _fee = double.parse(value!),
               ),
+              SizedBox(height: 4,),
               SwitchListTile(
                 title: Text('Personal Training'),
                 value: _personalTraining,
@@ -86,6 +153,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
@@ -100,7 +168,7 @@ class _EditPlanPageState extends State<EditPlanPage> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Save'),
+                child: Text('Update Details',style: TextStyle(color: Colors.white),),
               ),
             ],
           ),

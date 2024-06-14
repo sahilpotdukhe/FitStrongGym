@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:arjunagym/Resources/FirebaseResources.dart';
+import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
 import 'package:arjunagym/Screens/DashBoard.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
@@ -79,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       await Future.delayed(Duration(seconds: 6));
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => DashBoard()),
+          MaterialPageRoute(builder: (context) => CustomBottomNavigationBar()),
           (route) => false);
     } else {
       // setState(() {

@@ -1,4 +1,5 @@
 import 'package:arjunagym/Models/UserModel.dart';
+import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
 import 'package:arjunagym/Screens/DashBoard.dart';
 import 'package:arjunagym/Screens/AuthenticationScreens/LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +13,7 @@ class Authenticate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (_auth.currentUser != null) {
-      return DashBoard();
+      return CustomBottomNavigationBar();
     } else {
       return LoginScreen();
     }

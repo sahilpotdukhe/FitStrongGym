@@ -18,7 +18,7 @@
         </intent>
     </queries>
     <application
-        android:label="arjunagym"
+        android:label="FitStrong Gym"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

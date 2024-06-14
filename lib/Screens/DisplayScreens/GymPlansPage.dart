@@ -1,6 +1,7 @@
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Screens/EditScreens/AddGymPlanPage.dart';
 import 'package:arjunagym/Screens/EditScreens/EditPlanPage.dart';
+import 'package:arjunagym/Widgets/PlansQuietBox.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _GymPlansPageState extends State<GymPlansPage> {
         ],
         backgroundColor: UniversalVariables.appThemeColor,
       ),
-      body: ListView.builder(
+      body: (plans.length==0)?PlansQuietBox():ListView.builder(
         itemCount: plans.length,
         itemBuilder: (context, index) {
           GymPlanModel plan = plans[index];

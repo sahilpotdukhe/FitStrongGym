@@ -2,6 +2,7 @@ import 'package:arjunagym/Provider/MemberProvider.dart';
 import 'package:arjunagym/Widgets/MemberCard.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberDetailsPage.dart';
 import 'package:arjunagym/Screens/SearchScreen.dart';
+import 'package:arjunagym/Widgets/MembersQuietBox.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class _DisplayAllMembersState extends State<DisplayAllMembers> {
         ],
       ),
       body: members.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? MembersQuietBox(screen: 'nomembers',)
           : ListView.builder(
               itemCount: members.length,
               itemBuilder: (context, index) {

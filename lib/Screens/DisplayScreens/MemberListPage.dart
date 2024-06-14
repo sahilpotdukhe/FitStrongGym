@@ -2,6 +2,7 @@ import 'package:arjunagym/Screens/EditScreens/EditMemberDetailsPage.dart';
 import 'package:arjunagym/Widgets/MemberCard.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberDetailsPage.dart';
 import 'package:arjunagym/Screens/SearchScreen.dart';
+import 'package:arjunagym/Widgets/MembersQuietBox.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:arjunagym/Screens/EditScreens/RenewMembershipPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -106,7 +107,7 @@ class MemberListSection extends StatelessWidget {
     final plans = gymPlanProvider.plans;
 
     if (members.isEmpty) {
-      return Center(child: CircularProgressIndicator());
+      return MembersQuietBox(screen: 'nomembers',);
     }
 
     final filteredMembers =

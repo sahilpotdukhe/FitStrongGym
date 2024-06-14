@@ -1,3 +1,4 @@
+import 'package:arjunagym/Widgets/MembersQuietBox.dart';
 import 'package:arjunagym/Widgets/RecycleMemberCard.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _RecycleBinPageState extends State<RecycleBinPage> {
         ),
       ),
       body: recycleBinMembers.isEmpty
-          ? Center(child: Center(child: Text('No members are deleted'),))
+          ? MembersQuietBox(screen: 'recycle',)
           : ListView.builder(
               itemCount: recycleBinMembers.length,
               itemBuilder: (context, index) {

@@ -1,6 +1,7 @@
 import 'package:arjunagym/Models/UserModel.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
 import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
+import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     UserModel? userModel = userProvider.getUser;
+    ScaleUtils.init(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -35,27 +37,29 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 100,
+              height: 100*ScaleUtils.verticalScale,
             ),
             (userModel != null)
                 ? Image.network(
                     userModel.profilePhoto,
-                    height: 250,
-                    width: 250,
+                    height: 250*ScaleUtils.verticalScale,
+                    width: 250*ScaleUtils.horizontalScale,
                   )
                 : Image.asset(
                     'assets/splashlogo.jpg',
-                    height: 250,
-                    width: 250,
+                    height: 250*ScaleUtils.verticalScale,
+                    width: 250*ScaleUtils.horizontalScale,
                   ),
             Lottie.asset(
               'assets/splashweight.json',
+              height: 200*ScaleUtils.verticalScale,
+              width: 200*ScaleUtils.horizontalScale
             ),
             Spacer(),
             Image.asset(
               'assets/developer.png',
-              height: 200,
-              width: 200,
+              height: 200*ScaleUtils.verticalScale,
+              width: 200*ScaleUtils.horizontalScale,
             ),
           ],
         ),

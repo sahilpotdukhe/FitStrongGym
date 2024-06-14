@@ -1,6 +1,7 @@
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Screens/EditScreens/AddGymPlanPage.dart';
 import 'package:arjunagym/Screens/EditScreens/EditPlanPage.dart';
+import 'package:arjunagym/Widgets/ScaleUtils.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +26,7 @@ class _GymPlansPageState extends State<GymPlansPage> {
 
   @override
   Widget build(BuildContext context) {
+    ScaleUtils.init(context);
     final gymPlanProvider = Provider.of<GymPlanProvider>(context);
     final plans = gymPlanProvider.plans;
     return Scaffold(
@@ -53,7 +55,7 @@ class _GymPlansPageState extends State<GymPlansPage> {
                 child: Text(
                             'Add',
                             style: TextStyle(
-                  color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500),
+                  color: Colors.white, fontSize: 18*ScaleUtils.scaleFactor, fontWeight: FontWeight.w500),
                           ),
               ))
         ],
@@ -68,7 +70,7 @@ class _GymPlansPageState extends State<GymPlansPage> {
             child: Card(
               elevation: 14,
               child: Container(
-                margin: EdgeInsets.all(20),
+                margin: EdgeInsets.all(20*ScaleUtils.scaleFactor),
                 // height: 200,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,8 +79,8 @@ class _GymPlansPageState extends State<GymPlansPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          height: 80,
-                          width: 80,
+                          height: 80*ScaleUtils.verticalScale,
+                          width: 80*ScaleUtils.horizontalScale,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: HexColor('F7EF8A'),
@@ -136,12 +138,12 @@ class _GymPlansPageState extends State<GymPlansPage> {
                           child: Center(child: FaIcon(FontAwesomeIcons.crown)),
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 20*ScaleUtils.horizontalScale,
                         ),
                         Text(
                           plan.name,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 18*ScaleUtils.scaleFactor, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -155,16 +157,16 @@ class _GymPlansPageState extends State<GymPlansPage> {
                                 Text(
                                   'Description:',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16*ScaleUtils.scaleFactor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  width: 10*ScaleUtils.horizontalScale,
                                 ),
                                 Text(
                                   '${plan.months} months',
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14*ScaleUtils.scaleFactor,
                                       fontWeight: FontWeight.w400),
                                 ),
                               ],
@@ -174,16 +176,16 @@ class _GymPlansPageState extends State<GymPlansPage> {
                                 Text(
                                   'Price:',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16*ScaleUtils.scaleFactor,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  width: 10*ScaleUtils.verticalScale,
                                 ),
                                 Text(
                                   '\₹${plan.fee}',
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 14*ScaleUtils.scaleFactor,
                                       fontWeight: FontWeight.w400),
                                 ),
                               ],
@@ -201,8 +203,8 @@ class _GymPlansPageState extends State<GymPlansPage> {
                             );
                           },
                           child: Container(
-                            width: 100,
-                            height: 40,
+                            width: 100*ScaleUtils.verticalScale,
+                            height: 40*ScaleUtils.horizontalScale,
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(16),
@@ -213,13 +215,14 @@ class _GymPlansPageState extends State<GymPlansPage> {
                                 Text(
                                   'Edit',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
+                                      fontSize: 16*ScaleUtils.scaleFactor, color: Colors.white),
                                 ),
                                 SizedBox(
-                                  width: 10,
+                                  width: 10*ScaleUtils.horizontalScale,
                                 ),
                                 Icon(
                                   Icons.edit,
+                                  size: 18*ScaleUtils.scaleFactor,
                                   color: Colors.white,
                                 )
                               ],
@@ -229,7 +232,7 @@ class _GymPlansPageState extends State<GymPlansPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 20*ScaleUtils.scaleFactor,
                     ),
                   ],
                 ),

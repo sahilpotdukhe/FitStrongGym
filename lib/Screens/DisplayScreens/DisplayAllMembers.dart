@@ -29,6 +29,7 @@ class _DisplayAllMembersState extends State<DisplayAllMembers> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: UniversalVariables.appThemeColor,
         title: Text(
           'Members',

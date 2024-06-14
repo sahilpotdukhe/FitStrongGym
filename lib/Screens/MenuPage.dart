@@ -71,7 +71,7 @@ class _MenuPageState extends State<MenuPage>
       body: userModel == null
           ? Center(child: CircularProgressIndicator())
           : Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.0*ScaleUtils.scaleFactor),
               child: ListView(children: [
                 InkWell(
                   onTap: () {
@@ -85,7 +85,7 @@ class _MenuPageState extends State<MenuPage>
                     shadowColor: Colors.grey,
                     child: Container(
                       width: ScaleUtils.width,
-                      height: 130,
+                      height: 120*ScaleUtils.verticalScale,
                       // color: Colors.red,
                       decoration: BoxDecoration(
                         color: Colors.black,
@@ -152,10 +152,10 @@ class _MenuPageState extends State<MenuPage>
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 30*ScaleUtils.verticalScale,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  padding:  EdgeInsets.symmetric(horizontal: 18.0*ScaleUtils.horizontalScale),
                   child: Card(
                     elevation: 10,
                     shadowColor: Colors.grey,
@@ -165,7 +165,7 @@ class _MenuPageState extends State<MenuPage>
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12),
+                        padding:  EdgeInsets.symmetric(horizontal: 8.0*ScaleUtils.horizontalScale,vertical: 12*ScaleUtils.verticalScale),
                         child: Column(
                           children: [
                             InkWell(
@@ -192,7 +192,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'Add new Member',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)
@@ -224,7 +224,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'All Members',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)
@@ -256,7 +256,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'Add Gym Plan',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)
@@ -289,7 +289,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'All Gym Plans',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)
@@ -323,7 +323,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'Recycle Bin',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)
@@ -358,7 +358,7 @@ class _MenuPageState extends State<MenuPage>
                                     ),
                                     Text(
                                       'About Developer',
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 17*ScaleUtils.scaleFactor),
                                     ),
                                     Spacer(),
                                     Icon(Icons.arrow_forward_ios_sharp)

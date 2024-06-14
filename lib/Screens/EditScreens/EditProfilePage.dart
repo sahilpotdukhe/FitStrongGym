@@ -107,9 +107,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       onTap: _pickImage,
                       child: CircleAvatar(
                         backgroundColor: UniversalVariables.appThemeColor,
-                        radius: 64,
+                        radius: 60*ScaleUtils.scaleFactor,
                         child: CircleAvatar(
-                          radius: 60,
+                          radius: 54*ScaleUtils.scaleFactor,
                           backgroundImage: AssetImage('assets/user.jpg'),
                           foregroundImage: _imageFile != null
                               ? FileImage(_imageFile!)
@@ -123,7 +123,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 74 * ScaleUtils.verticalScale,
+                            height: 84 * ScaleUtils.verticalScale,
                           ),
                           InkWell(
                             onTap: _pickImage,

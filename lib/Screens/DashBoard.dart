@@ -70,12 +70,12 @@ class _DashBoardState extends State<DashBoard> {
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 10,
-        leading: IconButton(
-          icon: Icon(Icons.nat,color: Colors.white,),
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.nat,color: Colors.white,),
+        //   onPressed: (){
+        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+        //   },
+        // ),
       ),
       body: Stack(children: [
         Image.asset(
@@ -95,7 +95,7 @@ class _DashBoardState extends State<DashBoard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(20*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale, 10*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale),
                       child: InkWell(
                         onTap: () {
                           Navigator.push(
@@ -118,12 +118,12 @@ class _DashBoardState extends State<DashBoard> {
                               Text(
                                 'Total Members',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white, fontSize: 14*ScaleUtils.scaleFactor),
                               ),
                               Text(
                                 '${members.length}',
                                 style: TextStyle(
-                                    fontSize: 40, color: Colors.white),
+                                    fontSize: 38*ScaleUtils.scaleFactor, color: Colors.white),
                               ),
                             ],
                           )),
@@ -131,7 +131,7 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                      padding: EdgeInsets.fromLTRB(20*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale, 10*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale),
                       child: InkWell(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>GymPlansPage()));
@@ -150,12 +150,12 @@ class _DashBoardState extends State<DashBoard> {
                               Text(
                                 'Gym Plans',
                                 style:
-                                    TextStyle(color: Colors.white, fontSize: 16),
+                                    TextStyle(color: Colors.white, fontSize: 14*ScaleUtils.scaleFactor),
                               ),
                               Text(
                                 '${plans.length}',
                                 style:
-                                    TextStyle(fontSize: 40, color: Colors.white),
+                                    TextStyle(fontSize: 40*ScaleUtils.scaleFactor, color: Colors.white),
                               ),
                             ],
                           )),
@@ -172,7 +172,7 @@ class _DashBoardState extends State<DashBoard> {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ActiveMembersPage()));
                       },
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                        padding: EdgeInsets.fromLTRB(20*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale, 10*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale),
                         child: Container(
                           decoration: BoxDecoration(
                             color: HexColor('2BC155'),
@@ -187,12 +187,12 @@ class _DashBoardState extends State<DashBoard> {
                               Text(
                                 'Active Members',
                                 style:
-                                    TextStyle(color: Colors.white, fontSize: 16),
+                                    TextStyle(color: Colors.white, fontSize: 14*ScaleUtils.scaleFactor),
                               ),
                               Text(
                                 '${activemembers.length}',
                                 style:
-                                    TextStyle(fontSize: 40, color: Colors.white),
+                                    TextStyle(fontSize: 38*ScaleUtils.scaleFactor, color: Colors.white),
                               ),
                             ],
                           )),
@@ -204,7 +204,7 @@ class _DashBoardState extends State<DashBoard> {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ExpiredMembersPage()));
                       },
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+                        padding: EdgeInsets.fromLTRB(20*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale, 10*ScaleUtils.horizontalScale, 10*ScaleUtils.verticalScale),
                         child: Container(
                           decoration: BoxDecoration(
                             color: HexColor('FF0000'),
@@ -219,12 +219,12 @@ class _DashBoardState extends State<DashBoard> {
                               Text(
                                 'Expired Members',
                                 style:
-                                    TextStyle(color: Colors.white, fontSize: 16),
+                                    TextStyle(color: Colors.white, fontSize: 14*ScaleUtils.scaleFactor),
                               ),
                               Text(
                                 '${expiredmembers.length}',
                                 style:
-                                    TextStyle(fontSize: 40, color: Colors.white),
+                                    TextStyle(fontSize: 38*ScaleUtils.scaleFactor, color: Colors.white),
                               ),
                             ],
                           )),

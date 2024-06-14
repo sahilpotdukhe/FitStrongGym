@@ -99,8 +99,8 @@ class _AddMemberPageState extends State<AddMemberPage> {
                             ),
                             Container(
                               margin: EdgeInsets.only(
-                                  right: 6 * ScaleUtils.horizontalScale,
-                                  top: 8 * ScaleUtils.verticalScale),
+                                  right: 5 * ScaleUtils.horizontalScale,
+                                  top: 12 * ScaleUtils.verticalScale),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: HexColor("3957ED"),

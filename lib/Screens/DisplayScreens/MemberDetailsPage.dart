@@ -25,7 +25,7 @@ class MemberDetailsPage extends StatelessWidget {
         title: Text('Member Details',style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:  EdgeInsets.all(16.0*ScaleUtils.scaleFactor),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class MemberDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10*ScaleUtils.verticalScale,),
               Padding(
                 padding: EdgeInsets.all(8.0*ScaleUtils.scaleFactor),
                 child: Row(
@@ -117,127 +117,130 @@ class MemberDetailsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10*ScaleUtils.verticalScale,),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30*ScaleUtils.scaleFactor),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ]),
-                  child: Padding(
-                    padding:  EdgeInsets.all(18.0*ScaleUtils.scaleFactor),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Name",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.name,
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Mobile Number",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.mobileNumber,
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Height",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.height.toString(),
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Weight",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.weight.toString(),
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Address",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.address,
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Gender",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.gender,
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Date of Birth",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          '${DateFormat('dd-MM-yyyy').format(member.dateOfBirth)}',
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Date of Admission",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          '${DateFormat('dd-MM-yyyy').format(member.dateOfAdmission)}',
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Renewal Date",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          '${DateFormat('dd-MM-yyyy').format(member.renewalDate)}',
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                        Divider(),
-                        Text(
-                          "Member Id",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
-                        ),
-                        Text(
-                          member.id,
-                          style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
-                        ),
-                      ],
+                child: Card(
+                  elevation: 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30*ScaleUtils.scaleFactor),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ]),
+                    child: Padding(
+                      padding:  EdgeInsets.all(18.0*ScaleUtils.scaleFactor),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.name,
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Mobile Number",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.mobileNumber,
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Height",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.height.toString(),
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Weight",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.weight.toString(),
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Address",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.address,
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Gender",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.gender,
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Date of Birth",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            '${DateFormat('dd-MM-yyyy').format(member.dateOfBirth)}',
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Date of Admission",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            '${DateFormat('dd-MM-yyyy').format(member.dateOfAdmission)}',
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Renewal Date",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            '${DateFormat('dd-MM-yyyy').format(member.renewalDate)}',
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                          Divider(),
+                          Text(
+                            "Member Id",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18*ScaleUtils.scaleFactor),
+                          ),
+                          Text(
+                            member.id,
+                            style: TextStyle(fontSize: 16*ScaleUtils.scaleFactor),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

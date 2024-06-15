@@ -2,6 +2,7 @@ import 'package:arjunagym/Models/UserModel.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
 import 'package:arjunagym/Screens/CustomBottomNavigationBar.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -40,13 +41,13 @@ class _SplashScreenState extends State<SplashScreen> {
               height: 100*ScaleUtils.verticalScale,
             ),
             (userModel != null)
-                ? Image.network(
-                    userModel.profilePhoto,
+                ? CachedNetworkImage(
+                    imageUrl: userModel.profilePhoto,
                     height: 250*ScaleUtils.verticalScale,
                     width: 250*ScaleUtils.horizontalScale,
                   )
                 : Image.asset(
-                    'assets/splashlogo.jpg',
+                    'assets/invoiceimage.png',
                     height: 250*ScaleUtils.verticalScale,
                     width: 250*ScaleUtils.horizontalScale,
                   ),

@@ -4,24 +4,13 @@ import 'package:arjunagym/Provider/MemberProvider.dart';
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Provider/UserProvider.dart';
 import 'package:arjunagym/Screens/DisplayScreens/ActiveMembersPage.dart';
-import 'package:arjunagym/Screens/EditScreens/AddGymPlanPage.dart';
-import 'package:arjunagym/Screens/EditScreens/AddMemberPage.dart';
-import 'package:arjunagym/Screens/DisplayScreens/DisplayAllMembers.dart';
 import 'package:arjunagym/Screens/DisplayScreens/ExpiredMembersPage.dart';
 import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
-import 'package:arjunagym/Models/InvoiceModel.dart';
-import 'package:arjunagym/Screens/SplashScreen.dart';
-import 'package:arjunagym/Widgets/MemberCard.dart';
+import 'package:arjunagym/Screens/AttendancePage.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberListPage.dart';
-import 'package:arjunagym/Screens/MenuPage.dart';
-import 'package:arjunagym/Resources/PdfApi.dart';
-import 'package:arjunagym/Screens/InvoicesScreens/PdfInvoicePage.dart';
-import 'package:arjunagym/Screens/DisplayScreens/RecycleBinPage.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
-import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 
@@ -73,7 +62,7 @@ class _DashBoardState extends State<DashBoard> {
         // leading: IconButton(
         //   icon: Icon(Icons.nat,color: Colors.white,),
         //   onPressed: (){
-        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>AttendancePage()));
         //   },
         // ),
       ),

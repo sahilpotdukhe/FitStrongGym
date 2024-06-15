@@ -1,3 +1,4 @@
+import 'package:arjunagym/Provider/AttendanceProvider.dart';
 import 'package:arjunagym/Resources/FirebaseResources.dart';
 import 'package:arjunagym/Provider/MemberProvider.dart';
 import 'package:arjunagym/Provider/GymPlanProvider.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => GymPlanProvider()..fetchPlans()),
         ChangeNotifierProvider(create: (context) => MemberProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => AttendanceProvider()),
       ],
       child: MaterialApp(
         title: 'Gym Management App',

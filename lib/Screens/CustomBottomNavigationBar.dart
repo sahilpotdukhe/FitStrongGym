@@ -1,3 +1,5 @@
+import 'package:arjunagym/Screens/AttendancePage.dart';
+import 'package:arjunagym/Screens/DisplayScreens/MemberListPage.dart';
 import 'package:arjunagym/Screens/EditScreens/AddMemberPage.dart';
 import 'package:arjunagym/Screens/DisplayScreens/DisplayAllMembers.dart';
 import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
@@ -29,7 +31,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         key: bottomNavigationKey,
         index: 2,
         items: const [
-          Icon(Icons.menu),
+          Icon(Icons.inventory_outlined),
           Icon(Icons.person_add),
           Icon(Icons.dashboard),
           FaIcon(FontAwesomeIcons.addressCard),
@@ -56,13 +58,13 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 getPage(int page) {
   switch (page) {
     case 0:
-      return GymPlansPage();
+      return AttendancePage();
     case 1:
       return AddMemberPage();
     case 2:
       return DashBoard();
     case 3:
-      return DisplayAllMembers();
+      return MemberListPage();
     case 4:
       return MenuPage();
   }

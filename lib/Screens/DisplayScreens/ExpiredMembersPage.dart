@@ -3,6 +3,7 @@ import 'package:arjunagym/Provider/GymPlanProvider.dart';
 import 'package:arjunagym/Widgets/MemberCard.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberDetailsPage.dart';
 import 'package:arjunagym/Screens/SearchScreen.dart';
+import 'package:arjunagym/Widgets/MembersQuietBox.dart';
 import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,7 +57,7 @@ class _ExpiredMembersPageState extends State<ExpiredMembersPage> {
         ],
       ),
       body: expiredMembers.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? MembersQuietBox(screen: 'nomembers',)
           : ListView.builder(
               itemCount: expiredMembers.length,
               itemBuilder: (context, index) {

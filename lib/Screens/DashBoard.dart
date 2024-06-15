@@ -9,6 +9,7 @@ import 'package:arjunagym/Screens/DisplayScreens/GymPlansPage.dart';
 import 'package:arjunagym/Screens/AttendancePage.dart';
 import 'package:arjunagym/Screens/DisplayScreens/MemberListPage.dart';
 import 'package:arjunagym/Widgets/ScaleUtils.dart';
+import 'package:arjunagym/Widgets/UniversalVariables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -57,7 +58,7 @@ class _DashBoardState extends State<DashBoard> {
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: UniversalVariables.appThemeColor,
         elevation: 10,
         // leading: IconButton(
         //   icon: Icon(Icons.nat,color: Colors.white,),

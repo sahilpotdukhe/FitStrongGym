@@ -60,7 +60,7 @@ class PdfInvoiceApi {
               Divider(),
               buildFooter(),
             ]));
-    return PdfApi.saveDocument(name: 'invoice.pdf', pdf: pdf);
+    return PdfApi.saveDocument(name: '${invoice.customer.name} ${DateFormat('dd-MM-yyyy').format(invoice.customer.dateOfAdmission)}.pdf', pdf: pdf);
   }
 
   static Widget buildTitle(Invoice invoice) {
